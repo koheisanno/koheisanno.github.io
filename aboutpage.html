@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <title>Kohei Sanno - About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kohei Sanno's personal website.">
+    <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />
+    <link rel="stylesheet" type="text/css" href="aboutstyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(window).scroll(function() {
+        		var w = $(window).width();
+                if(w > 600) {
+                    if($(window).scrollTop() > 50){
+                        $('#sign').css({'display':'none'});
+                        $('#sign2').css({'display':'block'});
+                        $('ul.nav1').animate({top:'20px'},0);
+                        $('#nav').css({'height': '80px'})
+                    } else {
+                        $('#sign').css({'display':'block'});
+                        $('#sign2').css({'display':'none'});
+                        $('ul.nav1').animate({top:'100px'},0);
+                        $('#nav').css({'height': '165px'})
+                    }
+                }
+            });
+            $(window).resize(function(){
+        		var w = $(window).width();
+        		if(w > 600 && $('#overlay').css('display')==='none') {
+        			$('ul.nav1').css({'display':'block'});
+
+        	    } else {
+                    $('ul.nav1').css({'display':'none'});
+                }
+                if(w <= 600 && $('#overlay').css('display')==='none') {
+                    $('#menu').css({'display':'block'});
+                } else {
+                    $('#menu').css({'display':'none'});
+                }
+                if($('#overlay').css('display')!=='none') {
+                        $('#close').css({'display':'block'});
+                }
+                if(w <= 600) {
+                    $('#sign').css({'display':'none'});
+                    $('#sign2').css({'display':'block'});
+                    $('#nav').css({'height': '60px'})
+                } else {
+                    if($(window).scrollTop() > 50){
+                        $('#sign').css({'display':'none'});
+                        $('#sign2').css({'display':'block'});
+                        $('#nav').css({'height': '80px'})
+                    } else {
+                        $('#sign').css({'display':'block'});
+                        $('#sign2').css({'display':'none'});
+                        $('#nav').css({'height': '160px'})
+                    }
+                }
+            });
+            $('li a').hover((event)=>{
+                $(event.currentTarget).css({'color':'gray'});
+                }, (event)=>{
+                $(event.currentTarget).css({'color':'black'});
+            });
+            $('a h1').hover((event)=>{
+                $(event.currentTarget).css({'color':'rgb(60, 60, 60)'});
+                }, (event)=>{
+                $(event.currentTarget).css({'color':'white'});
+            });
+            $('.icon').on('click', (event)=>{
+                $('#overlay').fadeToggle();
+                $('body').toggleClass('stopscroll');
+            })
+            $('#menu').on('click', (event)=>{
+                event.preventDefault();
+                $('#menu').fadeToggle();
+                $('#close').fadeToggle();
+            })
+            $('#close').on('click', (event)=>{
+                event.preventDefault();
+                if($(window).width()<=600) {
+                    $('#menu').fadeToggle();
+                    $('#close').fadeToggle();
+                } else {
+                    $('ul.nav1').css({'display':'block'});
+                    $('#close').fadeToggle();
+                }
+            })
+            $(".icon").hover(function(){
+                $(this).css({"transform": "scale(1.1)"});
+                }, function(){
+                $(this).css({"transform": "scale(1.0)"});
+            });
+        });    
+    </script>
+</head>
+<body>
+    <div id='overlay'>
+        <div id='overlaytxt'>
+                <a href="aboutpage.html"><h1 class=current>ABOUT</h1></a>
+                <a href="work.html"><h1>WORK</h1></a>
+                <a href="map.html"><h1>MAP</h1></a>
+                <a href="aboutpage.html"><h1>MY RAMBLINGS</h1></a>
+        </div>
+    </div>
+    <a href='#'><img src='icon.png' class='icon' id='menu'><img src='close.png' class='icon' id='close'></a>
+    <div class=content>
+        <div id=nav>
+            <ul class=nav1>
+                <li><a href="aboutpage.html" class=current class=navi>ABOUT</a></li>
+                <li><a href="work.html" class=navi>WORK</a></li>
+                <li><a href="map.html" class=navi>MAP</a></li>
+                <li><a href="aboutpage.html" class=navi>MY RAMBLINGS</a></li>
+            </ul>
+            <img src='sign.jpg' id='sign'>
+            <img src='sign2.jpg' id='sign2'>
+        </div>
+        <header id=headcontain>
+            <div id=head>
+                <h1>Hi, I'm Kohei. Currently a student at Singapore American School.</h1>
+                <p>This website, which I created myself, showcases my skills and also who I am. Have fun :)</p>
+            </div>
+            <div id=clear></div>
+        </header>
+    </div>
+</body>
+</html>
