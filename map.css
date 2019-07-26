@@ -57,7 +57,7 @@
     position: relative;
     display: inline-block;
     top: 10%;
-    font-size: 3vh;
+    font-size: 10px;
     text-align: center;
 }
 #overlaytxt a {
