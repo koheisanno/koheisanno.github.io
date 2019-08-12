@@ -91,6 +91,10 @@
                 }, function(){
                 $(this).css({"transform": "scale(1.0)"});
             });
+            $(".marker").on('click', (event)=>{
+                $(".marker").toggleClass('markerclicked');
+                $("#previous").slideToggle('fast');
+            })
         });    
     </script>
 </head>
@@ -98,31 +102,34 @@
     <div id='overlay'>
         <div id='overlaytxt'>
             <a href="index.html"><h1>ABOUT</h1></a>
-            <a href="work.html"><h1>WORK</h1></a>
             <a href="map.html"><h1>MAP</h1></a>
-            <a href="index.html"><h1 class=current>MY RAMBLINGS</h1></a>
+            <a href="blog.html"><h1 class=current>MY RAMBLINGS</h1></a>
         </div>
     </div>
     <a href='#'><img src='icon.png' class='icon' id='menu'><img src='close.png' class='icon' id='close'></a>
     <div id=nav>
         <ul class=nav1>
             <li><a href="index.html" class=navi>ABOUT</a></li>
-            <li><a href="work.html" class=navi>WORK</a></li>
             <li><a href="map.html" class=navi>MAP</a></li>
-            <li><a href="index.html" class=current class=navi>MY RAMBLINGS</a></li>
+            <li><a href="blog.html" class='current navi'>MY RAMBLINGS</a></li>
         </ul>
         <img src='sign.jpg' id='sign'>
         <img src='sign2.jpg' id='sign2'>
     </div>
     <div id=sidebar>
-        <img src='marker.png' id='marker'>
+        <img src='marker.png' class='marker'>
         <h3>archive</h3>
         <div id=previous>
             <p>test</p>
+            <p>test1</p>
+            <p>test2</p>
         </div>
     </div>
     <div id=content>
+        <div id=1>
+            <h1>Modeling the Gas Laws with a 2D Simulation</h1>
 
+        </div>
     </div>
 </body>
 </html>

@@ -26,9 +26,9 @@ html, body {
     display: none;
 }
 #sign {
-    height: 80px;
+    height: 60px;
     position: fixed;
-    top: 20px;
+    top: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
@@ -104,11 +104,11 @@ li a {
     color: black;
 }
 #head {
-    width: 55%;
+    width: 100%;
     float: right;
-    padding: 22% 15% 0 0;
-    text-align: left;
-    background-color: white;
+    padding: 22% 15% 0 15%;
+    text-align: center;
+    background-color: green;
 }
 #clear {
     clear: both;
