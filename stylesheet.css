@@ -103,6 +103,10 @@ a {
 li a {
     color: black;
 }
+
+title a{
+    color: black;
+}
 #sidebar h3 {
     font-size: 13px;
 }
