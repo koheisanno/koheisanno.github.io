@@ -6,7 +6,7 @@ $(document).ready(function(){
                 $('#sign').css({'display':'none'});
                 $('#sign2').css({'display':'block'});
                 $('ul.nav1').animate({top:'40px'},0);
-                $('#nav').css({'height': '80px'})
+                $('#nav').css({'height': '100px'})
             } else {
                 $('#sign').css({'display':'block'});
                 $('#sign2').css({'display':'none'});
