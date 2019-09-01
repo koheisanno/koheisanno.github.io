@@ -11,7 +11,7 @@ $(document).ready(function(){
                 $('#sign').css({'display':'block'});
                 $('#sign2').css({'display':'none'});
                 $('ul.nav1').animate({top:'100px'},0);
-                $('#nav').css({'height': '165px'})
+                $('#nav').css({'height': '180px'})
             }
         }
     });
