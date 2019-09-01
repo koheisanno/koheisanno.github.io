@@ -47,7 +47,7 @@ $(document).ready(function(){
             }
         }
     });
-    $('li a').hover((event)=>{
+    $('.defaultlink').hover((event)=>{
         $(event.currentTarget).css({'color':'gray'});
         }, (event)=>{
         $(event.currentTarget).css({'color':'black'});

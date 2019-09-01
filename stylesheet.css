@@ -99,16 +99,10 @@ li {
 }
 a {
     text-decoration: none;
-}
-li a {
     color: black;
+
 }
-.black {
-    color: black;
-}
-.title a{
-    color: black;
-}
+
 #sidebar h3 {
     font-size: 13px;
 }
