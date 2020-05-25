@@ -3,21 +3,43 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap');
+*{
+    font-family: 'Noto Sans HK', sans-serif;
+    background-color: #f1f1f1;
+}
 body{
     background-color: #f1f1f1;
 }
-form{
-    vertical-align:top;
+#parameters{
+    float: right;
+    width: 27%;
+}
+canvas{
     display: inline-block;
-    margin-right: 40px;
+    width: 70%;
+}
+h2{
+    font-size: 13px;
+}
+h3{
+    font-size: 16px;
+}
+label{
+    font-size: 12px;
+}
+form{
+    display: block;
 }
 canvas {
     border:1px solid #d3d3d3;
     background-color: #f1f1f1;
 }
+.submit{
+    margin-top: 5px;
+}
 #grange{
-    display: inline-block;
-    margin-left: 40px;
+    display: block;
 }
 #momentum{
     display: inline-block;
@@ -27,11 +49,10 @@ canvas {
     width: 250px;
 }
 #position{
-    display: inline-block;
-    margin-left: 10px;
+    display: block;
 }
 #numParticles{
-    display: inline-block;
+    display: block;
 }
 #reset{
     display: block;
@@ -43,6 +64,17 @@ canvas {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
+        var canvas = document.getElementsByTagName('canvas')[0];
+        var width = canvas.scrollWidth;
+        var height = canvas.scrollHeight;
+        var input1 = document.getElementById("centerX");
+        var input2 = document.getElementById("xcoor");
+        var input3 = document.getElementById("centerY");
+        var input4 = document.getElementById("ycoor");
+        input1.setAttribute("max",width);
+        input2.setAttribute("max",width);
+        input3.setAttribute("max",height);
+        input4.setAttribute("max",height);
         var str = document.getElementById("gvaluerange").value;
         document.getElementById("gvalue").innerHTML = "G Value: " + str;
         $('#gvaluerange').change(function(){
@@ -51,19 +83,26 @@ canvas {
         })
         $("canvas").mousemove(function(e) {
             var rect = myGameArea["canvas"].getBoundingClientRect();
-            document.getElementById("position").innerHTML = "Mouse position: (" + (e.pageX-rect.left).toString() + ", " + (e.pageY-rect.top).toString() + ")";
+            document.getElementById("position").innerHTML = "Mouse position: (" + parseInt(e.pageX-rect.left).toString() + ", " + parseInt(e.pageY-rect.top).toString() + ")";
         })
-        function getMousPos(canvas, e){
-        var rect = canvas.getBoundingClientRect();
-        return {
-            x: e.clientX-rect.left,
-            y: e.clientY-rect.top
-        };
-    }
+        $(window).resize(function(){
+            var canvas = document.getElementsByTagName('canvas')[0];
+            var width = canvas.scrollWidth;
+            var height = canvas.scrollHeight;
+            var input1 = document.getElementById("centerX");
+            var input2 = document.getElementById("xcoor");
+            var input3 = document.getElementById("centerY");
+            var input4 = document.getElementById("ycoor");
+            input1.setAttribute("max",width);
+            input2.setAttribute("max",width);
+            input3.setAttribute("max",height);
+            input4.setAttribute("max",height);
+        })
     });
 </script>
 <script>
 function reset(){
+    event.preventDefault()
     myEnv.particles = [];
     var myNode = document.getElementById("pariclesmom");
     while (myNode.firstChild) {
@@ -71,6 +110,7 @@ function reset(){
     }
 }
 function createOrbit(){
+    event.preventDefault()
     var x = parseInt(document.getElementById("centerX").value);
     var y = parseInt(document.getElementById("centerY").value);
     var centerRad = parseInt(document.getElementById("centerrad").value);
@@ -92,10 +132,12 @@ function createOrbit(){
     addParticles(myEnv, centerPos, centerRad, centerVel, Math.PI);
 }
 function createRandom(){
+    event.preventDefault()
     var num = parseInt(document.getElementById("numAdd").value);
     addParticlesRandom(myEnv, num);
 }
 function createParticle(){
+    event.preventDefault()
     var radius = parseInt(document.getElementById("radius").value);
     var position = [parseInt(document.getElementById("xval").value),parseInt(document.getElementById("yval").value)];
     var particle = [position, radius, 0, 0];
@@ -126,8 +168,8 @@ var myGameArea = {
     start : function() {
         this.frameNo = 0;
         this.constant = document.getElementById("gvaluerange").value*0.1;
-        this.canvas.width = 1300;
-        this.canvas.height = 600;
+        this.canvas.width = 900;
+        this.canvas.height = 550;
         this.context = this.canvas.getContext("2d");
         var last = document.getElementById("last"); 
         document.body.insertBefore(this.canvas, last);
@@ -222,14 +264,17 @@ function addParticles(env, p, rad, sp, ang){
 }
 
 function addParticlesRandom(env, n){
+    var canvas = document.getElementsByTagName('canvas')[0];
+    var width = canvas.scrollWidth;
+    var height = canvas.scrollHeight;
     var o;
     var xvalue;
     var yvalue;
     var radius;
     var pos;
     for(o=0; o<n; o++){
-        xvalue = Math.floor(Math.random() * 1300);
-        yvalue = Math.floor(Math.random() * 600);
+        xvalue = Math.floor(Math.random() * width);
+        yvalue = Math.floor(Math.random() * height);
         radius = Math.floor(Math.random() * 2) + 2;
         pos = [xvalue,yvalue];
         addParticles(env, pos, radius, 0, 0);
@@ -326,56 +371,55 @@ function updateGameArea() {
     document.getElementById("ymom").innerHTML = "y-momentum: " + myEnv.particles[ind].ymomentum;
 }
 </script>
-<form  onsubmit="createParticle()">
-    <h3>add a body:</h3>
-    <label>radius:</label>
-    <input type="number" min='1' max='15' value = '3' id='radius' step="1" required><br>
-    <label>x value:</label>
-    <input type="number" min='1' max='1300' id='xval' step="1"><br>
-    <label>y value:</label>
-    <input type="number" min='1' max='600' id='yval' step="1"><br>
-    <br>
-    <input type="submit" value="create">
-</form>
-<form  onsubmit="createRandom()">
-    <h3>add multiple bodies:</h3>
-    <label>number to add:</label>
-    <input type="number" min='1' max='80' id='numAdd' step="1"><br>
-    <br>
-    <input type="submit" value="create">
-</form>
-<form  onsubmit="createOrbit()">
-    <h3>create orbiting bodies:</h3>
-    <label>center mass x-value:</label>
-    <input type="number" min='0' max='1300' id='centerX' step="1"><br>
-    <label>center mass y-value:</label>
-    <input type="number" min='0' max='600' id='centerY' step="1"><br>
-    <label>center mass radius:</label>
-    <input type="number" min='1' max='20' id='centerrad' step="1"><br>
-    <label>orbiting mass radius:</label>
-    <input type="number" min='1' max='15' id='smallrad' step="1"><br>
-    <label>radius of orbit:</label>
-    <input type="number" min='1' max='120' id='orbitrad' step="1"><br>
-    <br>
-    <input type="submit" value="create">
-</form>
-<div id='momentum'>
-    <h3>momentum of bodies:</h3>
-    <label>Body: </label>
-    <select id="pariclesmom" name="pariclesmom">
-    </select>
-    <p id='xmom'></p>
-    <p id='ymom'></p>
-</div>
-<div id='grange'>
-    <h3>gravitational constant value:</h3>
-    <p id='gvalue'></p>
-    <input type="range" min="0.1" max="3" value="1" class="slider" id="gvaluerange" step="0.1">
-    <button onclick="reset()" id='reset'>reset</button>
+<div id='parameters'>
+    <form  onsubmit="createParticle()" id='formsub'>
+        <h3>add a body:</h3>
+        <label>radius:</label>
+        <input type="number" min='1' max='15' value = '3' id='radius' step="1" required><br>
+        <label>x value:</label>
+        <input type="number" min='1' id='xval' step="1" id='xcoor'><br>
+        <label>y value:</label>
+        <input type="number" min='1' id='yval' step="1" id='ycoor'><br>
+        <input type="submit" value="create" class='submit'>
+    </form>
+    <form  onsubmit="createRandom()">
+        <h3>add multiple bodies:</h3>
+        <label>number to add:</label>
+        <input type="number" min='1' max='80' id='numAdd' step="1"><br>
+        <input type="submit" value="create" class='submit'>
+    </form>
+    <form  onsubmit="createOrbit()">
+        <h3>create orbiting bodies:</h3>
+        <label>center mass x-value:</label>
+        <input type="number" min='0' id='centerX' step="1"><br>
+        <label>center mass y-value:</label>
+        <input type="number" min='0' id='centerY' step="1"><br>
+        <label>center mass radius:</label>
+        <input type="number" min='1' max='20' id='centerrad' step="1"><br>
+        <label>orbiting mass radius:</label>
+        <input type="number" min='1' max='15' id='smallrad' step="1"><br>
+        <label>radius of orbit:</label>
+        <input type="number" min='1' max='120' id='orbitrad' step="1"><br>
+        <input type="submit" value="create" class='submit'>
+    </form>
+    <div id='momentum'>
+        <h3>momentum of bodies:</h3>
+        <label>Body: </label>
+        <select id="pariclesmom" name="pariclesmom">
+        </select>
+        <h2 id='xmom'></h2>
+        <h2 id='ymom'></h2>
+    </div>
+    <div id='grange'>
+        <h3>gravitational constant value:</h3>
+        <label id='gvalue'></label>
+        <input type="range" min="0.1" max="3" value="1" class="slider" id="gvaluerange" step="0.1">
+        <button onclick="reset()" id='reset'>reset</button>
+    </div>
 </div>
 <div id=envinfo>
-    <p id='numParticles'></p>
-    <p id='position'></p>
+    <h2 id='numParticles'></h2>
+    <h2 id='position'></h2>
 </div>
 <div id=last>
 </div>
