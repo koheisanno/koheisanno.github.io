@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body{
+    background-color: #f1f1f1;
+}
+form{
+    vertical-align:top;
+    display: inline-block;
+    margin-right: 40px;
+}
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+#grange{
+    display: inline-block;
+    margin-left: 40px;
+}
+#momentum{
+    display: inline-block;
+    vertical-align:top;
+}
+#gvaluerange{
+    width: 250px;
+}
+#position{
+    display: inline-block;
+    margin-left: 10px;
+}
+#numParticles{
+    display: inline-block;
+}
+#reset{
+    display: block;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body onload="startSim()">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var str = document.getElementById("gvaluerange").value;
+        document.getElementById("gvalue").innerHTML = "G Value: " + str;
+        $('#gvaluerange').change(function(){
+            var str = document.getElementById("gvaluerange").value;
+            document.getElementById("gvalue").innerHTML = "G Value: " + str;
+        })
+        $("canvas").mousemove(function(e) {
+            var rect = myGameArea["canvas"].getBoundingClientRect();
+            document.getElementById("position").innerHTML = "Mouse position: (" + (e.pageX-rect.left).toString() + ", " + (e.pageY-rect.top).toString() + ")";
+        })
+        function getMousPos(canvas, e){
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: e.clientX-rect.left,
+            y: e.clientY-rect.top
+        };
+    }
+    });
+</script>
+<script>
+function reset(){
+    myEnv.particles = [];
+    var myNode = document.getElementById("pariclesmom");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.lastChild);
+    }
+}
+function createOrbit(){
+    var x = parseInt(document.getElementById("centerX").value);
+    var y = parseInt(document.getElementById("centerY").value);
+    var centerRad = parseInt(document.getElementById("centerrad").value);
+    var smallRad = parseInt(document.getElementById("smallrad").value);
+    var orbitRad = parseInt(document.getElementById("orbitrad").value);
+
+    var smallVel = Math.sqrt(myGameArea.constant*centerRad*centerRad*centerRad*2.356/orbitRad);
+    var centerPos = [x,y];
+    var smallPos = [x, y-orbitRad];
+    var centerVel = (smallVel*smallRad*smallRad*smallRad*2.356)/(centerRad*centerRad*centerRad*2.356);
+
+    document.getElementById("centerX").value=0;
+    document.getElementById("centerY").value=0;
+    document.getElementById("centerrad").value=0;
+    document.getElementById("smallrad").value=0;
+    document.getElementById("orbitrad").value=0;
+
+    addParticles(myEnv, smallPos, smallRad, smallVel, 0);
+    addParticles(myEnv, centerPos, centerRad, centerVel, Math.PI);
+}
+function createRandom(){
+    var num = parseInt(document.getElementById("numAdd").value);
+    addParticlesRandom(myEnv, num);
+}
+function createParticle(){
+    var radius = parseInt(document.getElementById("radius").value);
+    var position = [parseInt(document.getElementById("xval").value),parseInt(document.getElementById("yval").value)];
+    var particle = [position, radius, 0, 0];
+    addParticles(myEnv, position, radius, 0, 0);
+    document.getElementById("radius").value=3;
+    document.getElementById("xval").value=0;
+    document.getElementById("yval").value=0;
+
+    myEnv.pending.push(particle);
+}
+function startSim() {
+    myEnv = new Environment();
+    var p;
+    var pos;
+    for(p=0; p<0; p++){
+        var one = Math.floor(Math.random() * 400);
+        var two = Math.floor(Math.random() * 400);
+        var three = Math.floor(Math.random() * 2) + 3;
+        pos = [one,two];
+        addParticles(myEnv, pos, three, 0, 0);
+    }
+
+    myGameArea.start();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.frameNo = 0;
+        this.constant = document.getElementById("gvaluerange").value*0.1;
+        this.canvas.width = 1300;
+        this.canvas.height = 600;
+        this.context = this.canvas.getContext("2d");
+        var last = document.getElementById("last"); 
+        document.body.insertBefore(this.canvas, last);
+        this.interval = setInterval(updateGameArea, 20);
+        },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+class Environment {
+    constructor(){
+        this.particles = [];
+        this.color = (255,255,255);
+        this.numparticle = 0;
+        this.momentumX = 0;
+        this.momentumY = 0;
+        this.pending = [];
+    }
+
+    update(){
+        var num = this.particles.length;
+        var i;
+        for(i=0; i<num;i++){
+            var k;
+            for(k=i+1; k<this.particles.length; k++){
+                this.particles[i].attract(this.particles[k]);
+                this.particles[i].combine(this.particles[k]);
+                var r;
+                for(r=0; r<num;r++){
+                    if(this.particles[r].remove==true){
+                        this.particles.splice(r, 1);
+                    }
+                }
+            }
+            this.particles[i].move();
+        }
+        document.getElementById("numParticles").innerHTML = "Number of bodies: " + this.particles.length;
+    }
+
+    updatePending(){
+        var index;
+        for(index=0;index<this.pending.length;index++){
+            addParticles(this, this.pending[index][0], this.pending[index][1], this.pending[index][2], this.pending[index][3]);
+            this.pending.splice(index, 1);
+        }
+    }
+
+    calcMomentum(){
+        var number = this.particles.length;
+        var ix;
+        
+        for(ix=0; ix<number;ix++){
+            var q;
+            for(q=ix+1;q<number;q++){
+                if(myGameArea.frameNo>0){
+                    var dx = this.particles[ix].x - this.particles[q].x;
+                    var dy = this.particles[ix].y - this.particles[q].y;
+                    var angone = Math.atan2(this.particles[ix].y-this.particles[q].y, this.particles[ix].x-this.particles[q].x);
+                    var angtwo = Math.atan2(this.particles[q].y-this.particles[ix].y, this.particles[q].x-this.particles[ix].x);
+                    var dist = Math.hypot(dx, dy);
+                    if(dist>this.particles[ix].radius + this.particles[q].radius){
+                        var force = myGameArea.constant*this.particles[ix].mass * this.particles[q].mass / dist ** 2;
+                    }
+                    else{
+                        var force = 0;
+                    }
+                    this.momentumY += force*Math.sin(angone);
+                    this.momentumY += force*Math.sin(angtwo);
+                    this.particles[ix].ymomentum += force*Math.sin(angtwo);
+                    this.particles[q].ymomentum += force*Math.sin(angone);
+                    this.particles[ix].xmomentum += force*Math.cos(angtwo);
+                    this.particles[q].xmomentum += force*Math.cos(angone);
+                    this.momentumX += force*Math.cos(angone);
+                    this.momentumX += force*Math.cos(angtwo);
+                }
+            }
+        }
+    }
+}
+
+function addParticles(env, p, rad, sp, ang){
+    myPart = new Particle(p[0], p[1], rad, sp, ang);
+    env.particles.push(myPart);
+    env.numparticle+=1;
+    var myNode = document.getElementById("pariclesmom");
+    var opt = document.createElement('option');
+    var num = env.particles.length;
+    opt.appendChild( document.createTextNode((num).toString()) );
+    opt.value = num;
+    myNode.appendChild(opt);
+}
+
+function addParticlesRandom(env, n){
+    var o;
+    var xvalue;
+    var yvalue;
+    var radius;
+    var pos;
+    for(o=0; o<n; o++){
+        xvalue = Math.floor(Math.random() * 1300);
+        yvalue = Math.floor(Math.random() * 600);
+        radius = Math.floor(Math.random() * 2) + 2;
+        pos = [xvalue,yvalue];
+        addParticles(env, pos, radius, 0, 0);
+    }
+}
+
+function vectors(vector1,vector2){
+    var posx = Math.cos(vector1[0]) * vector1[1] + Math.cos(vector2[0]) * vector2[1]
+    var posy = Math.sin(vector1[0]) * vector1[1] + Math.sin(vector2[0]) * vector2[1]
+
+    var length = Math.hypot(posx, posy)
+    var angle = Math.atan2(posy, posx)
+
+
+    var combined = [angle, length];
+
+    return combined;
+}
+
+class Particle {
+  constructor(x, y, radius, sp, ang) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = (0,0,0);
+    this.angle = ang;
+    this.mass = 2.356*radius*radius*radius;
+    this.speed = sp;
+    this.remove = false;
+    this.xmomentum = this.mass*this.speed*Math.cos(ang);
+    this.ymomentum = this.mass*this.speed*Math.sin(ang);
+  }
+  move() {
+    this.x += Math.cos(this.angle)*this.speed;
+    this.y -= Math.sin(this.angle)*this.speed;
+  }
+  accelerate(acceleration) {
+    var arr = [this.angle, this.speed];
+    this.angle = vectors(arr, acceleration)[0];
+    this.speed = vectors(arr, acceleration)[1];
+  }
+  test(){
+    document.getElementById("test").innerHTML = "Testing";
+  }
+  attract(other){
+    var dx = this.x - other.x;
+    var dy = other.y-this.y;
+    var dist = Math.hypot(dx, dy);
+    var theta = Math.atan2(dy, dx);
+    var force = myGameArea.constant*this.mass * other.mass / dist ** 2;
+
+    var arr1 = [theta + Math.PI, force / this.mass];
+    var arr2 = [theta, force / other.mass];
+
+    this.accelerate(arr1);
+    other.accelerate(arr2);
+  }
+  combine(other){
+    if(Math.hypot(this.x - other.x, this.y - other.y) < this.radius + other.radius){
+        var total_mass = this.mass + other.mass;
+        this.x = (this.x * this.mass + other.x * other.mass) / total_mass;
+        this.y = (this.y * this.mass + other.y * other.mass) / total_mass;
+        var array1 = [this.angle, this.speed * this.mass / total_mass];
+        var array2 = [other.angle, other.speed * other.mass / total_mass];
+        this.angle = vectors(array1, array2)[0];
+        this.speed = vectors(array1, array2)[1];
+        this.mass += other.mass;
+        this.radius = Math.cbrt(this.mass/2.356);
+        this.xmomentum = this.xmomentum+other.xmomentum;
+        this.ymomentum = this.ymomentum+other.ymomentum;
+        other.remove=true;
+        var myNode = document.getElementById("pariclesmom");
+        myNode.removeChild(myNode.lastElementChild);
+    }
+  }
+}
+
+
+function updateGameArea() {
+    myGameArea.clear();
+    myGameArea.frameNo += 1;
+    var j;
+    for(j=0;j<myEnv.particles.length;j++){
+        myGameArea.context.fillStyle = '#ff8080';
+        myGameArea.context.beginPath();
+        myGameArea.context.arc(myEnv.particles[j].x, myEnv.particles[j].y, myEnv.particles[j].radius, 0, 2 * Math.PI);
+        myGameArea.context.fill();
+    }
+    myGameArea.constant = document.getElementById("gvaluerange").value*0.1;
+    myEnv.calcMomentum();
+    myEnv.update();
+    var ind = document.getElementById("pariclesmom").value-1;
+    document.getElementById("xmom").innerHTML = "x-momentum: " + myEnv.particles[ind].xmomentum;
+    document.getElementById("ymom").innerHTML = "y-momentum: " + myEnv.particles[ind].ymomentum;
+}
+</script>
+<form  onsubmit="createParticle()">
+    <h3>add a body:</h3>
+    <label>radius:</label>
+    <input type="number" min='1' max='15' value = '3' id='radius' step="1" required><br>
+    <label>x value:</label>
+    <input type="number" min='1' max='1300' id='xval' step="1"><br>
+    <label>y value:</label>
+    <input type="number" min='1' max='600' id='yval' step="1"><br>
+    <br>
+    <input type="submit" value="create">
+</form>
+<form  onsubmit="createRandom()">
+    <h3>add multiple bodies:</h3>
+    <label>number to add:</label>
+    <input type="number" min='1' max='80' id='numAdd' step="1"><br>
+    <br>
+    <input type="submit" value="create">
+</form>
+<form  onsubmit="createOrbit()">
+    <h3>create orbiting bodies:</h3>
+    <label>center mass x-value:</label>
+    <input type="number" min='0' max='1300' id='centerX' step="1"><br>
+    <label>center mass y-value:</label>
+    <input type="number" min='0' max='600' id='centerY' step="1"><br>
+    <label>center mass radius:</label>
+    <input type="number" min='1' max='20' id='centerrad' step="1"><br>
+    <label>orbiting mass radius:</label>
+    <input type="number" min='1' max='15' id='smallrad' step="1"><br>
+    <label>radius of orbit:</label>
+    <input type="number" min='1' max='120' id='orbitrad' step="1"><br>
+    <br>
+    <input type="submit" value="create">
+</form>
+<div id='momentum'>
+    <h3>momentum of bodies:</h3>
+    <label>Body: </label>
+    <select id="pariclesmom" name="pariclesmom">
+    </select>
+    <p id='xmom'></p>
+    <p id='ymom'></p>
+</div>
+<div id='grange'>
+    <h3>gravitational constant value:</h3>
+    <p id='gvalue'></p>
+    <input type="range" min="0.1" max="3" value="1" class="slider" id="gvaluerange" step="0.1">
+    <button onclick="reset()" id='reset'>reset</button>
+</div>
+<div id=envinfo>
+    <p id='numParticles'></p>
+    <p id='position'></p>
+</div>
+<div id=last>
+</div>
+</body>
+</html>
