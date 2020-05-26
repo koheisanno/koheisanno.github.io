@@ -226,7 +226,7 @@ class Environment {
     calcMomentum(){
         var number = this.particles.length;
         var ix;
-        
+        //this.momentumX = 0;
         for(ix=0; ix<number;ix++){
             var q;
             for(q=ix+1;q<number;q++){
@@ -242,17 +242,23 @@ class Environment {
                     else{
                         var force = 0;
                     }
+                    this.momentumX += force*Math.cos(angone);
                     this.momentumY += force*Math.sin(angone);
+
+                    
+                    this.momentumX += force*Math.cos(angtwo);
                     this.momentumY += force*Math.sin(angtwo);
+
+
                     this.particles[ix].ymomentum += force*Math.sin(angtwo);
                     this.particles[q].ymomentum += force*Math.sin(angone);
                     this.particles[ix].xmomentum += force*Math.cos(angtwo);
                     this.particles[q].xmomentum += force*Math.cos(angone);
-                    this.momentumX += force*Math.cos(angone);
-                    this.momentumX += force*Math.cos(angtwo);
                 }
             }
+            //this.momentumX += this.particles[ix].mass*this.particles[ix].speed*Math.cos(this.particles[ix].angle);
         }
+        document.getElementById("test").innerHTML = this.momentumX;
     }
 }
 
@@ -428,5 +434,6 @@ function updateGameArea() {
 </div>
 <div id=last>
 </div>
+<p id='test'></p>
 </body>
 </html>
