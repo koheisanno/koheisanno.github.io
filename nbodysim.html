@@ -353,7 +353,7 @@ class Environment {
             }
             //this.momentumX += this.particles[ix].mass*this.particles[ix].speed*Math.cos(this.particles[ix].angle);
         }
-        document.getElementById("test4").innerHTML = myGameArea.constant;
+        //document.getElementById("test4").innerHTML = myGameArea.constant;
         document.getElementById("total").innerHTML = "total x-momentum: " + this.momentumX + " ------- total y-momentum: " + this.momentumY;
     }
 }
@@ -411,9 +411,6 @@ class Particle {
     this.y -= this.speedY;
   }
 
-  test(){
-    document.getElementById("test").innerHTML = "Testing";
-  }
   attract(other){
     var dx = this.x - other.x;
     var dy = other.y-this.y;
@@ -558,9 +555,5 @@ function updateGameArea() {
 </div>
 <h2 id='total'></h2>
 
-<!--<h2 id='test'>0</h2>
-<h2 id='test1'>0</h2>
-<h2 id='test2'></h2>
-<h2 id='test3'></h2>-->
 </body>
 </html>
