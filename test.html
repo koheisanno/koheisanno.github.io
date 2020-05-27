@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Celestial Sim</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+HK&display=swap');
@@ -24,12 +25,13 @@ h2{
 }
 h3{
     font-size: 16px;
+    margin-bottom: 5px;
 }
 label{
     font-size: 12px;
 }
-form{
-    display: block;
+form, #ellipseinfo{
+    display: none;
 }
 canvas {
     border:1px solid #d3d3d3;
@@ -37,6 +39,9 @@ canvas {
 }
 .submit{
     margin-top: 5px;
+}
+input {
+    width: 58px;
 }
 #grange{
     display: block;
@@ -58,33 +63,35 @@ canvas {
     display: block;
     margin-top: 20px;
 }
+#overlay {
+    width: 100%;
+    height: 100%;
+    top:0;
+    position: fixed;
+    z-index: 8;
+    text-align: center;
+    padding-top: 200px;
+}
 </style>
 </head>
 <body onload="startSim()">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
     $(document).ready(function(){
-                    var canvas = document.getElementsByTagName('canvas')[0];
-            var width = canvas.scrollWidth;
-            var height = canvas.scrollHeight;
-            var input1 = document.getElementById("centerX");
-            var input2 = document.getElementById("xcoor");
-            var input3 = document.getElementById("centerY");
-            var input4 = document.getElementById("ycoor");
-            input1.setAttribute("max",width);
-            input2.setAttribute("max",width);
-            input3.setAttribute("max",height);
-            input4.setAttribute("max",height);
         var str = document.getElementById("gvaluerange").value;
-        document.getElementById("gvalue").innerHTML = "G Value: " + str;
+        document.getElementById("gvalue").innerHTML = "gravitational constant value: " + str;
+
+
         $('#gvaluerange').change(function(){
             var str = document.getElementById("gvaluerange").value;
-            document.getElementById("gvalue").innerHTML = "G Value: " + str;
+            document.getElementById("gvalue").innerHTML = "gravitational constant value: " + str;
         })
-        $("canvas").mousemove(function(e) {
+
+        $("body").mousemove(function(e) {
             var rect = myGameArea["canvas"].getBoundingClientRect();
             document.getElementById("position").innerHTML = "Mouse position: (" + parseInt(e.pageX-rect.left).toString() + ", " + parseInt(e.pageY-rect.top).toString() + ")";
         })
+
         $(window).resize(function(){
             var canvas = document.getElementsByTagName('canvas')[0];
             var width = canvas.scrollWidth;
@@ -108,6 +115,16 @@ function reset(){
     while (myNode.firstChild) {
         myNode.removeChild(myNode.lastChild);
     }
+    if(myGameArea.mode==="kepler"){
+        myEnv.prevPos=[];
+        myEnv.startpoints=[];
+        myEnv.area=0;
+        myEnv.area2=0;
+        myEnv.period=0;
+        document.getElementById("period").innerHTML = "Period: ";
+        document.getElementById("area1").innerHTML = "Area one: ";
+        document.getElementById("area2").innerHTML = "Area two: ";
+    }
 }
 function createOrbit(){
     event.preventDefault()
@@ -120,7 +137,7 @@ function createOrbit(){
     var smallVel = Math.sqrt(myGameArea.constant*centerRad*centerRad*centerRad*2.356/orbitRad);
     var centerPos = [x,y];
     var smallPos = [x, y-orbitRad];
-    var centerVel = (smallVel*smallRad*smallRad*smallRad*2.356)/(centerRad*centerRad*centerRad*2.356);
+    var centerVel = -(smallVel*smallRad*smallRad*smallRad*2.356)/(centerRad*centerRad*centerRad*2.356);
 
     document.getElementById("centerX").value=0;
     document.getElementById("centerY").value=0;
@@ -128,8 +145,9 @@ function createOrbit(){
     document.getElementById("smallrad").value=0;
     document.getElementById("orbitrad").value=0;
 
-    addParticles(myEnv, smallPos, smallRad, smallVel, 0);
-    addParticles(myEnv, centerPos, centerRad, centerVel, Math.PI);
+    addParticles(myEnv, smallPos, smallRad, smallVel, 0, false);
+    addParticles(myEnv, centerPos, centerRad, centerVel, 0, false);
+    myGameArea.start();
 }
 function createRandom(){
     event.preventDefault()
@@ -141,12 +159,28 @@ function createParticle(){
     var radius = parseInt(document.getElementById("radius").value);
     var position = [parseInt(document.getElementById("xval").value),parseInt(document.getElementById("yval").value)];
     var particle = [position, radius, 0, 0];
-    addParticles(myEnv, position, radius, 0, 0);
+    addParticles(myEnv, position, radius, 0, 0, false);
     document.getElementById("radius").value=3;
     document.getElementById("xval").value=0;
     document.getElementById("yval").value=0;
 
     myEnv.pending.push(particle);
+}
+function createEllipse(){
+    event.preventDefault();
+    var m = 8*Math.pow(10,20);
+    var v1 = parseFloat(document.getElementById("velOrbit").value);
+    var rad1 = parseInt(document.getElementById("radOne").value);
+    var r = parseInt(document.getElementById("rad").value);
+    var pos1 = [300,300];
+    var pos2 = [pos1[0]-r, pos1[1]];
+    var a = -myGameArea.constant*m/2*(1/((-myGameArea.constant*m/r)+(0.5*v1*v1)));
+    myEnv.prevPos = pos2;
+    //myEnv.period = 2*Math.PI*Math.sqrt(a*a*a/myGameArea.constant*m);
+    myEnv.period = 2*Math.PI*Math.sqrt(a*a*a/(myGameArea.constant*m));
+    addParticles(myEnv, pos1, m, 0, 0, true);
+    addParticles(myEnv, pos2, rad1, 0, v1, false);
+    myGameArea.start();
 }
 function startSim() {
     myEnv = new Environment();
@@ -160,19 +194,51 @@ function startSim() {
         addParticles(myEnv, pos, three, 0, 0);
     }
 
+    var pos1 = [300,300]
+    var pos2 = [300, 300]
+    var pos3 = [200, 300]
+
+    //addParticles(myEnv, pos2, 8*Math.pow(10,20), 0, 1.2*Math.pow(10,-18), true);
+    //addParticles(myEnv, pos3, 5, 0, -3.2, false);
+
+    //addParticles(myEnv, pos1, 15, 0, -0.5746);
+    //document.getElementById("test2").innerHTML = 0;
+
+    myGameArea.before();
+}
+function elliptical(){
+    myGameArea.mode="kepler";
+    myGameArea.constant = Math.pow(10,-18);
+    document.getElementById("elliptical").style.display = "block";
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("grange").style.display = "none";
+    document.getElementById("ellipseinfo").style.display = "block";
+}
+function circular(){
+    myGameArea.mode="circular";
+    document.getElementById("circular").style.display = "block";
+    document.getElementById("overlay").style.display = "none";
+}
+function randomBodies(){
+    myGameArea.mode="default";
+    document.getElementById("formsub").style.display = "block";
+    document.getElementById("random").style.display = "block";
+    document.getElementById("overlay").style.display = "none";
     myGameArea.start();
 }
-
 var myGameArea = {
     canvas : document.createElement("canvas"),
-    start : function() {
-        this.frameNo = 0;
-        this.constant = document.getElementById("gvaluerange").value*0.1;
+    before : function(){
+        this.mode = "";
         this.canvas.width = 900;
         this.canvas.height = 550;
-        this.context = this.canvas.getContext("2d");
         var last = document.getElementById("last"); 
         document.body.insertBefore(this.canvas, last);
+        this.constant = document.getElementById("gvaluerange").value;
+        },
+    start : function() {
+        this.frameNo = 0;
+        this.context = this.canvas.getContext("2d");
         this.interval = setInterval(updateGameArea, 20);
         },
     clear : function() {
@@ -188,6 +254,11 @@ class Environment {
         this.momentumX = 0;
         this.momentumY = 0;
         this.pending = [];
+        this.area = 0;
+        this.area2=0;
+        this.startpoints=[];
+        this.prevPos = [];
+        this.period = 0;
     }
 
     update(){
@@ -207,21 +278,51 @@ class Environment {
             }
             this.particles[i].move();
         }
+        if(myGameArea.mode==="kepler"){
+            this.calcArea(this.particles[0],this.particles[1]);
+        }
         document.getElementById("numParticles").innerHTML = "Number of bodies: " + this.particles.length;
     }
 
-    updatePending(){
-        var index;
-        for(index=0;index<this.pending.length;index++){
-            addParticles(this, this.pending[index][0], this.pending[index][1], this.pending[index][2], this.pending[index][3]);
-            this.pending.splice(index, 1);
+    calcArea(sun, orbit){
+        var timeone = myEnv.period*0.25;
+        var timetwo = myEnv.period*0.5;
+        var timethree = 0.75*myEnv.period;
+
+        if(myGameArea.frameNo>0 && myGameArea.frameNo<timeone){
+            myEnv.startpoints.push([orbit.x,orbit.y]);
+            var a = Math.hypot(orbit.x-myEnv.prevPos[0], orbit.y-myEnv.prevPos[1]);
+            var b = Math.hypot(sun.x-orbit.x, sun.y-orbit.y);
+            var c = Math.hypot(sun.x-myEnv.prevPos[0], sun.y-myEnv.prevPos[1]);
+            myEnv.prevPos = [orbit.x, orbit.y]
+            var angle = Math.acos(((a*a)-(b*b)-(c*c))/(-2*b*c))
+            myEnv.area += 0.5 * c * c * angle;
+        }
+        if(myGameArea.frameNo==parseInt(timetwo)){
+            this.prevPos = [orbit.x, orbit.y];
+        }
+        if(myGameArea.frameNo>timetwo && myGameArea.frameNo<timethree){
+            myEnv.startpoints.push([orbit.x,orbit.y]);
+            var a = Math.hypot(orbit.x-myEnv.prevPos[0], orbit.y-myEnv.prevPos[1]);
+            var b = Math.hypot(sun.x-orbit.x, sun.y-orbit.y);
+            var c = Math.hypot(sun.x-myEnv.prevPos[0], sun.y-myEnv.prevPos[1]);
+            myEnv.prevPos = [orbit.x, orbit.y]
+            var angle = Math.acos(((a*a)-(b*b)-(c*c))/(-2*b*c))
+            myEnv.area2 += 0.5 * c * c * angle;
+        }
+        for(var i=0; i<myEnv.startpoints.length; i++){
+            myGameArea.context.strokeStyle = "gray";
+            myGameArea.context.beginPath();
+            myGameArea.context.moveTo(myEnv.startpoints[i][0], myEnv.startpoints[i][1]);
+            myGameArea.context.lineTo(sun.x, sun.y);
+            myGameArea.context.stroke();
         }
     }
+
 
     calcMomentum(){
         var number = this.particles.length;
         var ix;
-        
         for(ix=0; ix<number;ix++){
             var q;
             for(q=ix+1;q<number;q++){
@@ -237,22 +338,28 @@ class Environment {
                     else{
                         var force = 0;
                     }
+                    this.momentumX += force*Math.cos(angone);
                     this.momentumY += force*Math.sin(angone);
+
+                    
+                    this.momentumX += force*Math.cos(angtwo);
                     this.momentumY += force*Math.sin(angtwo);
+
                     this.particles[ix].ymomentum += force*Math.sin(angtwo);
                     this.particles[q].ymomentum += force*Math.sin(angone);
                     this.particles[ix].xmomentum += force*Math.cos(angtwo);
                     this.particles[q].xmomentum += force*Math.cos(angone);
-                    this.momentumX += force*Math.cos(angone);
-                    this.momentumX += force*Math.cos(angtwo);
                 }
             }
+            //this.momentumX += this.particles[ix].mass*this.particles[ix].speed*Math.cos(this.particles[ix].angle);
         }
+        document.getElementById("test4").innerHTML = myGameArea.constant;
+        document.getElementById("total").innerHTML = "total x-momentum: " + this.momentumX + " ------- total y-momentum: " + this.momentumY;
     }
 }
 
-function addParticles(env, p, rad, sp, ang){
-    myPart = new Particle(p[0], p[1], rad, sp, ang);
+function addParticles(env, p, rad, spX, spY, sun){
+    myPart = new Particle(p[0], p[1], rad, spX, spY, sun);
     env.particles.push(myPart);
     env.numparticle+=1;
     var myNode = document.getElementById("pariclesmom");
@@ -277,45 +384,33 @@ function addParticlesRandom(env, n){
         yvalue = Math.floor(Math.random() * height);
         radius = Math.floor(Math.random() * 2) + 2;
         pos = [xvalue,yvalue];
-        addParticles(env, pos, radius, 0, 0);
+        addParticles(env, pos, radius, 0, 0, false);
     }
 }
 
-function vectors(vector1,vector2){
-    var posx = Math.cos(vector1[0]) * vector1[1] + Math.cos(vector2[0]) * vector2[1]
-    var posy = Math.sin(vector1[0]) * vector1[1] + Math.sin(vector2[0]) * vector2[1]
-
-    var length = Math.hypot(posx, posy)
-    var angle = Math.atan2(posy, posx)
-
-
-    var combined = [angle, length];
-
-    return combined;
-}
-
 class Particle {
-  constructor(x, y, radius, sp, ang) {
+  constructor(x, y, radius, spX, spY, sun) {
     this.x = x;
     this.y = y;
-    this.radius = radius;
-    this.color = (0,0,0);
-    this.angle = ang;
-    this.mass = 2.356*radius*radius*radius;
-    this.speed = sp;
+    if(sun){
+        this.radius = 24;
+        this.mass = radius;
+    }
+    else{
+        this.radius = radius;
+        this.mass = 2.356*radius*radius*radius;
+    }
+    this.speedX = spX;
+    this.speedY = spY;
     this.remove = false;
-    this.xmomentum = this.mass*this.speed*Math.cos(ang);
-    this.ymomentum = this.mass*this.speed*Math.sin(ang);
+    this.xmomentum = this.mass*this.speedX;
+    this.ymomentum = this.mass*this.speedY;
   }
   move() {
-    this.x += Math.cos(this.angle)*this.speed;
-    this.y -= Math.sin(this.angle)*this.speed;
+    this.x += this.speedX;
+    this.y -= this.speedY;
   }
-  accelerate(acceleration) {
-    var arr = [this.angle, this.speed];
-    this.angle = vectors(arr, acceleration)[0];
-    this.speed = vectors(arr, acceleration)[1];
-  }
+
   test(){
     document.getElementById("test").innerHTML = "Testing";
   }
@@ -324,23 +419,25 @@ class Particle {
     var dy = other.y-this.y;
     var dist = Math.hypot(dx, dy);
     var theta = Math.atan2(dy, dx);
-    var force = myGameArea.constant*this.mass * other.mass / dist ** 2;
+    var accel1 = [-Math.cos(theta)*((myGameArea.constant * other.mass) / dist ** 2), -Math.sin(theta)*((myGameArea.constant * other.mass) / dist ** 2)];
+    var accel2 = [Math.cos(theta)*((myGameArea.constant * this.mass) / dist ** 2), Math.sin(theta)*((myGameArea.constant * this.mass) / dist ** 2)];
 
-    var arr1 = [theta + Math.PI, force / this.mass];
-    var arr2 = [theta, force / other.mass];
+    this.speedX += accel1[0];
+    this.speedY += accel1[1];
 
-    this.accelerate(arr1);
-    other.accelerate(arr2);
+    other.speedX += accel2[0];
+    other.speedY += accel2[1];
   }
   combine(other){
     if(Math.hypot(this.x - other.x, this.y - other.y) < this.radius + other.radius){
         var total_mass = this.mass + other.mass;
         this.x = (this.x * this.mass + other.x * other.mass) / total_mass;
         this.y = (this.y * this.mass + other.y * other.mass) / total_mass;
-        var array1 = [this.angle, this.speed * this.mass / total_mass];
-        var array2 = [other.angle, other.speed * other.mass / total_mass];
-        this.angle = vectors(array1, array2)[0];
-        this.speed = vectors(array1, array2)[1];
+
+
+        this.speedX = (this.speedX*this.mass + other.speedX*other.mass)/(this.mass+other.mass);
+        this.speedY = (this.speedY*this.mass + other.speedY*other.mass)/(this.mass+other.mass);
+
         this.mass += other.mass;
         this.radius = Math.cbrt(this.mass/2.356);
         this.xmomentum = this.xmomentum+other.xmomentum;
@@ -363,12 +460,28 @@ function updateGameArea() {
         myGameArea.context.arc(myEnv.particles[j].x, myEnv.particles[j].y, myEnv.particles[j].radius, 0, 2 * Math.PI);
         myGameArea.context.fill();
     }
-    myGameArea.constant = document.getElementById("gvaluerange").value*0.1;
+    if(myGameArea.mode==="kepler"){
+        myGameArea.constant = Math.pow(10,-18);
+    }
+    else{
+        myGameArea.constant = document.getElementById("gvaluerange").value;
+    }
     myEnv.calcMomentum();
     myEnv.update();
     var ind = document.getElementById("pariclesmom").value-1;
     document.getElementById("xmom").innerHTML = "x-momentum: " + myEnv.particles[ind].xmomentum;
     document.getElementById("ymom").innerHTML = "y-momentum: " + myEnv.particles[ind].ymomentum;
+    //document.getElementById("test").innerHTML = myEnv.particles[1].speedY;
+    //document.getElementById("test").innerHTML = myEnv.area;
+    //document.getElementById("test1").innerHTML = myEnv.area2;
+    //if(parseInt(document.getElementById("test2").textContent)<myEnv.particles[1].x){
+      //document.getElementById("test2").innerHTML = myEnv.particles[1].x;
+    //}
+    if(myGameArea.mode==="kepler"){
+        document.getElementById("period").innerHTML = "Period: "+myEnv.period;
+        document.getElementById("area1").innerHTML = "Area one: "+myEnv.area;
+        document.getElementById("area2").innerHTML = "Area two: "+myEnv.area2;
+    }
 }
 </script>
 <div id='parameters'>
@@ -382,13 +495,13 @@ function updateGameArea() {
         <input type="number" min='1' id='yval' step="1" id='ycoor'><br>
         <input type="submit" value="create" class='submit'>
     </form>
-    <form  onsubmit="createRandom()">
+    <form  onsubmit="createRandom()" id='random'>
         <h3>add multiple bodies:</h3>
         <label>number to add:</label>
-        <input type="number" min='1' max='80' id='numAdd' step="1"><br>
+        <input type="number" min='1' max='120' id='numAdd' step="1"><br>
         <input type="submit" value="create" class='submit'>
     </form>
-    <form  onsubmit="createOrbit()">
+    <form  onsubmit="createOrbit()" id=circular>
         <h3>create orbiting bodies:</h3>
         <label>center mass x-value:</label>
         <input type="number" min='0' id='centerX' step="1"><br>
@@ -402,6 +515,16 @@ function updateGameArea() {
         <input type="number" min='1' max='120' id='orbitrad' step="1"><br>
         <input type="submit" value="create" class='submit'>
     </form>
+    <form  onsubmit="createEllipse()" id=elliptical>
+        <h3>create elliptical orbits:</h3>
+        <label>orbit velocity:</label>
+        <input type="number" min='0' id='velOrbit' step="0.1"><br>
+        <label>orbiting body radius:</label>
+        <input type="number" min='0' id='radOne' step="1"><br>
+        <label>orbit radius:</label>
+        <input type="number" min='1' id='rad' step="1"><br>
+        <input type="submit" value="create" class='submit'>
+    </form>
     <div id='momentum'>
         <h3>momentum of bodies:</h3>
         <label>Body: </label>
@@ -411,10 +534,14 @@ function updateGameArea() {
         <h2 id='ymom'></h2>
     </div>
     <div id='grange'>
-        <h3>gravitational constant value:</h3>
-        <label id='gvalue'></label>
+        <h3 id='gvalue'></h3>
         <input type="range" min="0.1" max="3" value="1" class="slider" id="gvaluerange" step="0.1">
-        <button onclick="reset()" id='reset'>reset</button>
+    </div>
+    <button onclick="reset()" id='reset'>reset</button>
+    <div id=ellipseinfo>
+        <h2 id='period'></h2>
+        <h2 id='area1'></h2>
+        <h2 id='area2'></h2>
     </div>
 </div>
 <div id=envinfo>
@@ -423,5 +550,17 @@ function updateGameArea() {
 </div>
 <div id=last>
 </div>
+<div id='overlay'>
+    <h1>Celestial Bodies Simulation</h1>
+    <button onclick="randomBodies()" id='randomBodies'>default</button>
+    <button onclick="circular()" id='circular'>circular orbit</button>
+    <button onclick="elliptical()" id='elliptical'>elliptical orbit</button>
+</div>
+<h2 id='total'></h2>
+
+<!--<h2 id='test'>0</h2>
+<h2 id='test1'>0</h2>
+<h2 id='test2'></h2>
+<h2 id='test3'></h2>-->
 </body>
 </html>
