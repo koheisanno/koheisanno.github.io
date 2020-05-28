@@ -121,7 +121,10 @@ function reset(){
         myEnv.area=0;
         myEnv.area2=0;
         myEnv.period=0;
+        myEnv.axis=0;
         document.getElementById("period").innerHTML = "Period: ";
+        document.getElementById("a").innerHTML = "Semi-major axis: ";
+        document.getElementById("actual").innerHTML = '0';
         document.getElementById("area1").innerHTML = "Area one: ";
         document.getElementById("area2").innerHTML = "Area two: ";
     }
@@ -175,6 +178,7 @@ function createEllipse(){
     var pos1 = [300,300];
     var pos2 = [pos1[0]-r, pos1[1]];
     var a = -myGameArea.constant*m/2*(1/((-myGameArea.constant*m/r)+(0.5*v1*v1)));
+    myEnv.axis = a;
     myEnv.prevPos = pos2;
     //myEnv.period = 2*Math.PI*Math.sqrt(a*a*a/myGameArea.constant*m);
     myEnv.period = 2*Math.PI*Math.sqrt(a*a*a/(myGameArea.constant*m));
@@ -259,6 +263,7 @@ class Environment {
         this.startpoints=[];
         this.prevPos = [];
         this.period = 0;
+        this.a = 0;
     }
 
     update(){
@@ -471,13 +476,14 @@ function updateGameArea() {
     //document.getElementById("test").innerHTML = myEnv.particles[1].speedY;
     //document.getElementById("test").innerHTML = myEnv.area;
     //document.getElementById("test1").innerHTML = myEnv.area2;
-    //if(parseInt(document.getElementById("test2").textContent)<myEnv.particles[1].x){
-      //document.getElementById("test2").innerHTML = myEnv.particles[1].x;
-    //}
     if(myGameArea.mode==="kepler"){
         document.getElementById("period").innerHTML = "Period: "+myEnv.period;
+        document.getElementById("a").innerHTML = "Semi-major axis (theoretical): "+myEnv.axis;
         document.getElementById("area1").innerHTML = "Area one: "+myEnv.area;
         document.getElementById("area2").innerHTML = "Area two: "+myEnv.area2;
+        if(parseInt(document.getElementById("actual").textContent)+myEnv.startpoints[0][0]<myEnv.particles[1].x){
+            document.getElementById("actual").innerHTML = myEnv.particles[1].x-myEnv.startpoints[0][0];
+        }
     }
 }
 </script>
@@ -537,6 +543,8 @@ function updateGameArea() {
     <button onclick="reset()" id='reset'>reset</button>
     <div id=ellipseinfo>
         <h2 id='period'></h2>
+        <h2 id='a'></h2>
+        <h2 id='actual'>0</h2>
         <h2 id='area1'></h2>
         <h2 id='area2'></h2>
     </div>
