@@ -489,7 +489,7 @@ function updateGameArea() {
 </script>
 <div id='parameters'>
     <form  onsubmit="createParticle()" id='formsub'>
-        <h3>add a body:</h3>
+        <h3>add an object:</h3>
         <label>radius:</label>
         <input type="number" min='1' max='15' value = '3' id='radius' step="1" required><br>
         <label>x value:</label>
@@ -499,13 +499,13 @@ function updateGameArea() {
         <input type="submit" value="create" class='submit'>
     </form>
     <form  onsubmit="createRandom()" id='random'>
-        <h3>add multiple bodies:</h3>
+        <h3>add multiple objects:</h3>
         <label>number to add:</label>
         <input type="number" min='1' max='120' id='numAdd' step="1"><br>
         <input type="submit" value="create" class='submit'>
     </form>
     <form  onsubmit="createOrbit()" id=circular>
-        <h3>create orbiting bodies:</h3>
+        <h3>create orbiting objects:</h3>
         <label>center mass x-value:</label>
         <input type="number" min='0' id='centerX' step="1"><br>
         <label>center mass y-value:</label>
@@ -529,8 +529,8 @@ function updateGameArea() {
         <input type="submit" value="create" class='submit'>
     </form>
     <div id='momentum'>
-        <h3>momentum of bodies:</h3>
-        <label>Body: </label>
+        <h3>momentum of objects:</h3>
+        <label>Object: </label>
         <select id="pariclesmom" name="pariclesmom">
         </select>
         <h2 id='xmom'></h2>
