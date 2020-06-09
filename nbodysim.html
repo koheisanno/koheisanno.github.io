@@ -481,8 +481,8 @@ function updateGameArea() {
         document.getElementById("a").innerHTML = "Semi-major axis (theoretical): "+myEnv.axis;
         document.getElementById("area1").innerHTML = "Area one: "+myEnv.area;
         document.getElementById("area2").innerHTML = "Area two: "+myEnv.area2;
-        if(parseInt(document.getElementById("actual").textContent)+myEnv.startpoints[0][0]<myEnv.particles[1].x){
-            document.getElementById("actual").innerHTML = myEnv.particles[1].x-myEnv.startpoints[0][0];
+        if(parseInt(document.getElementById("actual").textContent)*2+myEnv.startpoints[0][0]<myEnv.particles[1].x){
+            document.getElementById("actual").innerHTML = (myEnv.particles[1].x-myEnv.startpoints[0][0])/2;
         }
     }
 }
@@ -511,21 +511,21 @@ function updateGameArea() {
         <label>center mass y-value:</label>
         <input type="number" min='0' id='centerY' step="1"><br>
         <label>center mass radius:</label>
-        <input type="number" min='1' max='20' id='centerrad' step="1"><br>
+        <input type="number" min='10' max='20' id='centerrad' step="1"><br>
         <label>orbiting mass radius:</label>
-        <input type="number" min='1' max='15' id='smallrad' step="1"><br>
+        <input type="number" min='2' max='5' id='smallrad' step="1"><br>
         <label>radius of orbit:</label>
-        <input type="number" min='1' max='120' id='orbitrad' step="1"><br>
+        <input type="number" min='100' max='150' id='orbitrad' step="1"><br>
         <input type="submit" value="create" class='submit'>
     </form>
     <form  onsubmit="createEllipse()" id=elliptical>
         <h3>create elliptical orbits:</h3>
         <label>orbit velocity:</label>
-        <input type="number" min='0' id='velOrbit' step="0.1"><br>
+        <input type="number" min='3' max='5' id='velOrbit' step="0.1"><br>
         <label>orbiting body radius:</label>
-        <input type="number" min='0' id='radOne' step="1"><br>
+        <input type="number" min='4' max='6' id='radOne' step="1"><br>
         <label>orbit radius:</label>
-        <input type="number" min='1' id='rad' step="1"><br>
+        <input type="number" min='80' max='120' id='rad' step="1"><br>
         <input type="submit" value="create" class='submit'>
     </form>
     <div id='momentum'>
@@ -544,7 +544,7 @@ function updateGameArea() {
     <div id=ellipseinfo>
         <h2 id='period'></h2>
         <h2 id='a'></h2>
-        <h2 id='actual'>0</h2>
+        <span>Semi-major axis (actual): </span><span id='actual'>0</span>
         <h2 id='area1'></h2>
         <h2 id='area2'></h2>
     </div>

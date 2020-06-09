@@ -210,10 +210,19 @@ th, td {
     padding: 0;
 }
 #footertext{
-    font-size: 20px;
+    font-size: 24px;
     line-height: 24px;
-    display: inline-block;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    color: #444444;
+    text-align: center;
+    display: block;
+}
+#developer{
+    float: right;
+    position: relative;
+    top: 100px;
 }
