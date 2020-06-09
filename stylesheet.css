@@ -235,6 +235,12 @@ th, td {
     position: relative;
     top: 100px;
 }
+#git{
+    text-decoration: underline;
+}
+#git:hover{
+    color: #444444;
+}
 
 @media screen and (max-width: 600px) {
     .title{
