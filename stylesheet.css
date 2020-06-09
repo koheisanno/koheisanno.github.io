@@ -183,6 +183,16 @@ a:hover{
     .subsubsubtitle{
         font-size: 16px;
     }
+    #footertext{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 490px) {
+    #developer{
+        position: relative;
+        top: 130px;
+    }
 }
 
 /**.map {
