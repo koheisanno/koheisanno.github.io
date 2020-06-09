@@ -170,31 +170,6 @@ a:hover{
     }
 }**/
 
-@media screen and (max-width: 600px) {
-    .title{
-        font-size: 22px;
-    }
-    .subtitle{
-        font-size: 20px;
-    }
-    .subsubtitle{
-        font-size: 18px;
-    }
-    .subsubsubtitle{
-        font-size: 16px;
-    }
-    #footertext{
-        font-size: 20px;
-    }
-}
-
-@media screen and (max-width: 490px) {
-    #developer{
-        position: relative;
-        top: 130px;
-    }
-}
-
 /**.map {
     position: relative;
     padding-bottom: 56.25%;
@@ -259,4 +234,35 @@ th, td {
     float: right;
     position: relative;
     top: 100px;
+}
+
+@media screen and (max-width: 600px) {
+    .title{
+        font-size: 22px;
+    }
+    .subtitle{
+        font-size: 20px;
+    }
+    .subsubtitle{
+        font-size: 18px;
+    }
+    .subsubsubtitle{
+        font-size: 16px;
+    }
+    #footertext{
+        font-size: 20px;
+    }
+    #sign{
+        height: 30px;
+    }
+    #nav{
+        height: 80px;
+    }
+}
+
+@media screen and (max-width: 405px) {
+    #developer{
+        position: relative;
+        top: 120px;
+    }
 }
