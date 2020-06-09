@@ -51,147 +51,19 @@
             <h4 class=subsubtitle>Boyle’s Law</h4>
             <p>I ran the simulation with 150 particles and a temperature of 100, while varying the dimensions to adjust the area. If the model followed Boyle’s law, the pressure should be inversely proportional to the area, which would produce a constant k when the pressure and area are multiplied.</p>
             <p class=bold>Data</p>
-            <table>
-                <tr>
-                    <td class=bold>Area</td>
-                    <td class=bold>40000</td>
-                    <td class=bold>160000</td>
-                    <td class=bold>640000</td>
-                    <td class=bold>2560000</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #1</td>
-                    <td>1.891331926</td>
-                    <td>0.4703377178</td>
-                    <td>0.1186827154</td>
-                    <td>0.02934030732</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #2</td>
-                    <td>1.900476418</td>
-                    <td>0.477952687</td>
-                    <td>0.1177322941</td>
-                    <td>0.02942059497</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #3</td>
-                    <td>1.913537661</td>
-                    <td>0.4726606929</td>
-                    <td>0.117768984</td>
-                    <td>0.02978780237</td>
-                </tr>
-                <tr>
-                    <td class=bold>Mean</td>
-                    <td>1.901782002</td>
-                    <td>0.4736503659</td>
-                    <td>0.1180613312</td>
-                    <td>0.02951623489</td>
-                </tr>
-                <tr>
-                    <td class=bold>Constant k</td>
-                    <td>76071.28007</td>
-                    <td>75784.05855</td>
-                    <td>75559.25195</td>
-                    <td>75561.56131</td>
-                </tr>
-            </table>
+            <img src='data1.png' style="width: 100%;">
             <p>Mean k=75744.03797<br>Standard Dev=242.3032857<br>Relative Standard Dev=0.32%</p>
             <p>The data produced a constant k of around 76000, demonstrating Boyle’s law.</p>
             <h4 class=subsubtitle>Gay-Lussac’s Law</h4>
             <p>I ran the simulation with 150 particles and an area of 90000 (300 by 300), while varying the temperature. If the model followed Gay-Lussac’s law, the pressure should be proportional to the temperature, which would produce a constant k when the temperature is divided by the pressure.</p>
             <p class=bold>Data</p>
-            <table>
-                <tr>
-                    <td class=bold>Temp</td>
-                    <td class=bold>25</td>
-                    <td class=bold>50</td>
-                    <td class=bold>100</td>
-                    <td class=bold>200</td>
-                    <td class=bold>300</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #1</td>
-                    <td>0.2103200299</td>
-                    <td>0.419131912</td>
-                    <td>0.8429404892</td>
-                    <td>1.696066025</td>
-                    <td>2.533367269</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #2</td>
-                    <td>0.2118974843</td>
-                    <td>0.4242292482</td>
-                    <td>0.8460971522</td>
-                    <td>1.681423142</td>
-                    <td>2.530911322</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #3</td>
-                    <td>0.2127299575</td>
-                    <td>0.4217037011</td>
-                    <td>0.8453368155</td>
-                    <td>1.695317443</td>
-                    <td>2.541062469</td>
-                </tr>
-                <tr>
-                    <td class=bold>Mean</td>
-                    <td>0.2116491572</td>
-                    <td>0.4216882871</td>
-                    <td>0.8447914856</td>
-                    <td>1.690935537</td>
-                    <td>2.535113687</td>
-                </tr>
-                <tr>
-                    <td class=bold>Constant k</td>
-                    <td>118.1200073</td>
-                    <td>118.5709955</td>
-                    <td>118.3724051</td>
-                    <td>118.27772</td>
-                    <td>118.3378882</td>
-                </tr>
-            </table>
+            <img src='data2.png' style="width: 100%;">
             <p>Mean k=118.3358032<br>Standard Dev=0.1632490347<br>Relative Standard Dev=0.14%</p>
             <p>The data produced a constant k of around 118, demonstrating Gay-Lussac’s law.</p>
             <h4 class=subsubtitle>Charles’ Law</h4>
             <p>I ran the simulation with 150 particles, while varying the temperature and area. I adjusted the temperature and area such that the ratio between the two would remain the same. This would establish V1T1=V2T2. If the model followed Gay-Lussac’s law, the other variables would remain constant, including pressure.</p>
             <p class=bold>Data</p>
-            <table>
-                <tr>
-                    <td class=bold>Area/Temp</td>
-                    <td class=bold>10000/25</td>
-                    <td class=bold>40000/100</td>
-                    <td class=bold>90000/225</td>
-                    <td class=bold>160000/400</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #1</td>
-                    <td>1.948687366</td>
-                    <td>1.909097618</td>
-                    <td>1.90105351</td>
-                    <td>1.890044967</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #2</td>
-                    <td>1.956682906</td>
-                    <td>1.917660935</td>
-                    <td>1.905340604</td>
-                    <td>1.890678883</td>
-                </tr>
-                <tr>
-                    <td class=bold>Trial #3</td>
-                    <td>1.956463489</td>
-                    <td>1.922894754</td>
-                    <td>1.900918662</td>
-                    <td>1.893163012</td>
-                </tr>
-                <tr>
-                    <td class=bold>Mean</td>
-                    <td>1.953944587</td>
-                    <td>1.916551102</td>
-                    <td>1.902437592</td>
-                    <td>1.891295621</td>
-                </tr>
-            </table>
+            <img src='data3.png' style="width: 100%;">
             <p>Mean Pressure=1.916057225<br>Standard Dev=0.02729058177<br>Relative Standard Dev=1.42%</p>
             <p>The pressure remained relatively constant throughout the trials, demonstrating Charles’ law.</p>
         </div>

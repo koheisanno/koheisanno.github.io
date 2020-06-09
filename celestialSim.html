@@ -41,27 +41,27 @@
                 2)      Use the acceleration value to update the velocity value for each body.<br>
                 3)      Change the position of each body according to the velocity.<br><br>
                 These steps could easily be explained with a calculus-based approach. When determining the updated velocity in step 2, I am simply combining the current velocity vector and the acceleration vector. This is in accordance with this equation:<br><br>
-                <img class='blockformula' src='formula1.png'><br><br>
+                $$v_f=\int_i^f \frac{dv}{dt} \,dt +v_i$$ <br>
                 Where v<sub>i</sub> is the current velocity and v<sub>f</sub> is the updated velocity. Step 3 follows a very similar process:<br><br>
-                <img class='blockformula' src='formula2.png'><br><br>
+                $$x_f=\int_i^f \frac{dx}{dt} \,dt +x_i$$ <br>
                 Where x<sub>i</sub> is the current position and x<sub>f</sub> is the updated position.
             </p>
             <h4 class=subsubtitle>The Physics</h4>
             <p>
-                The formula to find the gravitational forces between individual objects is <img class='inlineformula' src='formula.png'>, where m1 and m2 represent the mass of the objects, and r is the distance between the two objects.
+                The formula to find the gravitational forces between individual objects is \(F=G\frac{m_1m_2}{r^2}\), where m1 and m2 represent the mass of the objects, and r is the distance between the two objects.
             </p>
             <h5 class=subsubsubtitle>Circular Orbits</h5>
             <p>
-                To find the tangential velocity in a circular orbit, one could set the above formula to the formula for centripetal forces, <img class='inlineformula' src='formula3.png'>.<br><br>
-                <img class='blockformula2' src='formula4.png'><br>
-                <img class='blockformula2' src='formula5.png'><br><br>
+                To find the tangential velocity in a circular orbit, one could set the above formula to the formula for centripetal forces, \(F_c=\frac{mv^2}{r}\).<br><br>
+                $$\frac{m_1v^2}{r}= G\frac{m_1m_2}{r^2}$$<br>
+                $$v=\sqrt{\frac{Gm_2}{r}}$$<br>
                 Where m<sub>2</sub> is the mass of the central object.
             </p>
             <h5 class=subsubsubtitle>Momentum</h5>
             <p>
                 I also explored momentum and how it can be calculated in this program. Because it is a closed system with only balanced forces acting on each element, total momentum of the system should stay at zero, but the individual momentum values should vary. There are two formulas for momentum:<br><br>
-                <img class='blockformula3' src='formula7.png'><br>
-                <img class='blockformula' src='formula6.png'><br><br>
+                $$p=mv$$<br>
+                $$\Delta p=J=\int_{t_1}^{t_2}F(t)dt$$<br>
                 I tried both methods to calculate momentum and decided to choose whichever one was most accurate, which I measured by adding the individual momentum values for each body and seeing how close it was to zero (as theoretically, total momentum in this system should always be zero).<br><br>
                 I first attempted to use the formula p=mv, as it was the simpler and easier one to use. Adding the individual momentum values of each body yielded a total momentum very close to 0 (usually in the ballpark of 10<sup>-12</sup>), although it got slightly less accurate as time went on.<br><br>
                 Momentum could be calculated using the second formula by simply interpreting what this means. The integral sign indicates that the change in momentum (p) is an accumulation of force multiplied by an infinitely small margin of time. In our case, our smallest possible margin of time is our frame rate. Therefore, at each frame, we could multiply the force on each body at that frame with dt, which is one, and add it onto the current momentum value.<br><br>
@@ -77,11 +77,11 @@
             <h4 class=subsubtitle>Finding the Period and Semi-Major Axis</h4>
             <p>
                 I approached this by looking at total energy. As energy is conserved throughout the orbit, the total mechanical energy of the object in orbit must be the same at both extrema of the ellipse. I used this property to set up this equation:<br><br>
-                <img class='blockformula2' src='formula8.png'><br><br>
-                Where <img class='inlineformula' src='formula9.png'> is the formula for the total mechanical energy of the object in orbit and a is the semi-major axis. We already know M, m, r, v because these are the values that the user will input, and G because it’s a known constant. From there, we could get the semi-major axis length:<br><br>
-                <img class='blockformula' src='formula10.png'><br><br>
+                $$\frac{-GMm}{2a}=\frac{-GMm}{r}+{1 \over 2} mv^2$$<br>
+                Where \(\frac{-GMm}{2a}\) is the formula for the total mechanical energy of the object in orbit and \(a\) is the semi-major axis. We already know M, m, r, v because these are the values that the user will input, and G because it’s a known constant. From there, we could get the semi-major axis length:<br><br>
+                $$a=\frac{-GM}{2}\frac{1}{\frac{-GM}{r}+\frac{1}{2}v^2}$$<br>
                 From Kepler’s third law, we have the formula:<br><br>
-                <img class='blockformula2' src='formula11.png'><br><br>
+                $$T=2\pi\sqrt{\frac{a^3}{GM}}$$<br>
                 This gives us the equation for the period of the orbit based upon the parameters that the user will input!
             </p>
             <h4 class=subsubtitle>Verifying Kepler’s Second Law</h4>
@@ -89,7 +89,7 @@
                 In order to check if my simulation was accurate, I checked if the program accurately demonstrated another law from Kepler, which states that the straight line joining a planet and a sun sweeps out equal areas in equal time. This is because as the planet gets closer to the sun, the planet would go faster, and vice versa.<br><br>
                 <img src='kepler.png'><br><br>
                 This is another opportunity to incorporate a bit of calculus. The most logical way of finding the total area is by using the equation for polar areas:<br><br>
-                <img class='blockformula' src='formula12.png'><br><br>
+                $$A=\frac12\int_a^b r^2 d\theta$$<br>
                 &theta; could easily be found using the law of cosines, and I will approximate r by using the distance between the planet and the sun at each frame. Essentially, this will be a right Riemann sum to estimate the polar area. Using the period that we found earlier, I made my program find the area for the first quarter of the period, and the third quarter of the period. The results showed that the areas were very close to one another, “verifying” Kepler’s third law and demonstrating the accuracy of my program.
             </p>
             <h3 class=subtitle>Conclusion</h3>
