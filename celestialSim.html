@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html lang=en>
+<head>
+    <title>Kohei Sanno - Celestial Sim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kohei Sanno's personal website.">
+    <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+<body>
+    <!--<div id='overlay'>
+        <div id='overlaytxt'>
+                <a href="index.html"><h1 class=current>ABOUT</h1></a>
+                <a href="blog.html"><h1>BLOG</h1></a>
+        </div>
+    </div>
+    <a href='#'><img src='icon.png' class='icon' id='menu'><img src='close.png' class='icon' id='close'></a>-->
+    <div id=nav>
+        <!--<ul class=nav1>
+            <li><a href="#headcontain" class="current navi defaultlink">ABOUT</a></li>
+            <li><a href="blog.html" class="navi defaultlink">BLOG</a></li>
+        </ul>-->
+        <img src='sign.jpg' id='sign'>
+        <img src='sign2.jpg' id='sign2'>
+    </div>
+    <div id=content>
+        <div id=1>
+            <h2 class=title>Celestial Simulations and "Verifying" Kepler's Laws</h2>
+            <h3 class=subtitle>Introduction</h3>
+            <p>
+                For my final AP Calculus BC project, I decided to combine my interest in math, physics, coding by creating a program that simulates celestial bodies and their gravitational effects on one another. While this may seem like a purely physics-based project, there is actually quite a bit of mathematics that goes into this program.<br><br>
+                <a href='nbodysim.html' class='bold'>Find the program here >></a>
+            </p>
+            <h3 class=subtitle>Exploration</h3>
+            <h4 class=subsubtitle>The Program</h4>
+            <p>
+                This program would be run by going through these steps at each time interval:<br><br>
+                1)      Iterate through each object and calculate the net force acting on each one according to the gravitational force formula, and use that value to determine net acceleration.<br>
+                2)      Use the acceleration value to update the velocity value for each body.<br>
+                3)      Change the position of each body according to the velocity.<br><br>
+                These steps could easily be explained with a calculus-based approach. When determining the updated velocity in step 2, I am simply combining the current velocity vector and the acceleration vector. This is in accordance with this equation:<br><br>
+                <img class='blockformula' src='formula1.png'><br><br>
+                Where v<sub>i</sub> is the current velocity and v<sub>f</sub> is the updated velocity. Step 3 follows a very similar process:<br><br>
+                <img class='blockformula' src='formula2.png'><br><br>
+                Where x<sub>i</sub> is the current position and x<sub>f</sub> is the updated position.
+            </p>
+            <h4 class=subsubtitle>The Physics</h4>
+            <p>
+                The formula to find the gravitational forces between individual objects is <img class='inlineformula' src='formula.png'>, where m1 and m2 represent the mass of the objects, and r is the distance between the two objects.
+            </p>
+            <h5 class=subsubsubtitle>Circular Orbits</h5>
+            <p>
+                To find the tangential velocity in a circular orbit, one could set the above formula to the formula for centripetal forces, <img class='inlineformula' src='formula3.png'>.<br><br>
+                <img class='blockformula2' src='formula4.png'><br>
+                <img class='blockformula2' src='formula5.png'><br><br>
+                Where m<sub>2</sub> is the mass of the central object.
+            </p>
+            <h5 class=subsubsubtitle>Momentum</h5>
+            <p>
+                I also explored momentum and how it can be calculated in this program. Because it is a closed system with only balanced forces acting on each element, total momentum of the system should stay at zero, but the individual momentum values should vary. There are two formulas for momentum:<br><br>
+                <img class='blockformula3' src='formula7.png'><br>
+                <img class='blockformula' src='formula6.png'><br><br>
+                I tried both methods to calculate momentum and decided to choose whichever one was most accurate, which I measured by adding the individual momentum values for each body and seeing how close it was to zero (as theoretically, total momentum in this system should always be zero).<br><br>
+                I first attempted to use the formula p=mv, as it was the simpler and easier one to use. Adding the individual momentum values of each body yielded a total momentum very close to 0 (usually in the ballpark of 10<sup>-12</sup>), although it got slightly less accurate as time went on.<br><br>
+                Momentum could be calculated using the second formula by simply interpreting what this means. The integral sign indicates that the change in momentum (p) is an accumulation of force multiplied by an infinitely small margin of time. In our case, our smallest possible margin of time is our frame rate. Therefore, at each frame, we could multiply the force on each body at that frame with dt, which is one, and add it onto the current momentum value.<br><br>
+                It turns out that this method yielded more accurate results than the first method, so I kept this method in my final product.<br><br>
+                Up until this point, I was only dealing with concepts that I had learned in class. However, I wanted to take it a step further by studying elliptical orbits.
+            </p>
+            <h3 class=subtitle>Extension</h3>
+            <p>
+                My extension was looking into elliptical orbits and studying some laws associated with planetary orbits.<br><br>
+                Two physicists, Issac Newton and Johannes Kepler, contributed much of what we know about planetary motion today, with Kepler positing three laws of planetary motion, which were then verified and slightly modified based upon Newton’s law of universal gravitation. <br><br>
+                One conclusion was that all planetary orbits are conic sections, which are circles, ellipses, hyperbola, and parabolas. This means that, for any seemingly random non-circle orbit, there’s an ellipse that exactly matches that path. Using this fact, I wanted to see if I could find the period and the semi-major axis for any elliptical orbit.
+            </p>
+            <h4 class=subsubtitle>Finding the Period and Semi-Major Axis</h4>
+            <p>
+                I approached this by looking at total energy. As energy is conserved throughout the orbit, the total mechanical energy of the object in orbit must be the same at both extrema of the ellipse. I used this property to set up this equation:<br><br>
+                <img class='blockformula2' src='formula8.png'><br><br>
+                Where <img class='inlineformula' src='formula9.png'> is the formula for the total mechanical energy of the object in orbit and a is the semi-major axis. We already know M, m, r, v because these are the values that the user will input, and G because it’s a known constant. From there, we could get the semi-major axis length:<br><br>
+                <img class='blockformula' src='formula10.png'><br><br>
+                From Kepler’s third law, we have the formula:<br><br>
+                <img class='blockformula2' src='formula11.png'><br><br>
+                This gives us the equation for the period of the orbit based upon the parameters that the user will input!
+            </p>
+            <h4 class=subsubtitle>Verifying Kepler’s Second Law</h4>
+            <p>
+                In order to check if my simulation was accurate, I checked if the program accurately demonstrated another law from Kepler, which states that the straight line joining a planet and a sun sweeps out equal areas in equal time. This is because as the planet gets closer to the sun, the planet would go faster, and vice versa.<br><br>
+                <img src='kepler.png'><br><br>
+                This is another opportunity to incorporate a bit of calculus. The most logical way of finding the total area is by using the equation for polar areas:<br><br>
+                <img class='blockformula' src='formula12.png'><br><br>
+                &theta; could easily be found using the law of cosines, and I will approximate r by using the distance between the planet and the sun at each frame. Essentially, this will be a right Riemann sum to estimate the polar area. Using the period that we found earlier, I made my program find the area for the first quarter of the period, and the third quarter of the period. The results showed that the areas were very close to one another, “verifying” Kepler’s third law and demonstrating the accuracy of my program.
+            </p>
+            <h3 class=subtitle>Conclusion</h3>
+            <p>
+                One natural extension would be to look at other conic sections, such as a hyperbolic or parabolic “orbit”. As they won’t orbit back to its original position, this won’t necessarily be an orbit but, nevertheless, it would be interesting to see how the object’s movement can be modeled from a physics perspective. Another application would be to model our solar system with my model, although that may require more precision than what my program can currently accommodate.
+            </p>
+        </div>
+    </div>
+    <div id=footing>
+        <p id=footertext>Contact: firstname dot lastname at gmail.com</p>
+    </div>
+</body>
+</html>
