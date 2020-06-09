@@ -112,6 +112,9 @@ a {
     background-color: white;
     text-align: left;
 }
+#stronglink{
+    font-size: 16px;
+}
 .post{
     margin: 50px 0;
 }
