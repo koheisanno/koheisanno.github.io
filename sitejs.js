@@ -10,6 +10,7 @@ $(document).ready(function(){
         $('#menu').css({'display':'block'});
         $('#content').css({'margin':'80px auto 50px'});
         $('ul.nav1').css({'display':'none'});
+        $('#nav').css({'height': '60px'});
     }
     $(window).scroll(function() {
         var w = $(window).width();
