@@ -18,6 +18,9 @@
     height: 35px;
     width: 35px;
 }
+#menu {
+    display: none;
+}
 #sign {
     height: 40px;
     position: fixed;
@@ -25,6 +28,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
+    display: block;
 }
 #nav {
     width: 100%;
@@ -266,6 +270,15 @@ th, td {
     }
     .icon {
         top: 18px;
+    }
+    #menu {
+        display: block;
+    }
+    #content{
+        margin: 80px auto 50px;
+    }
+    ul.nav1{
+        display:none;
     }
 }
 

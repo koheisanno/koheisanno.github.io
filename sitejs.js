@@ -1,17 +1,4 @@
 $(document).ready(function(){
-    var w = $(window).width();
-    if(w > 600) {
-        $('#menu').css({'display':'none'});
-        $('#sign').css({'display':'block'});
-        $('#nav').css({'height': '120px'});
-        $('ul.nav1').css({'top': '80px'});
-    }
-    else{
-        $('#menu').css({'display':'block'});
-        $('#content').css({'margin':'80px auto 50px'});
-        $('ul.nav1').css({'display':'none'});
-        $('#nav').css({'height': '60px'});
-    }
     $(window).scroll(function() {
         var w = $(window).width();
         if(w > 600) {
