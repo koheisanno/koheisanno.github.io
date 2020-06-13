@@ -12,6 +12,7 @@
     width: 35px;
     transition: transform 0.1s ease;
     position: fixed;
+    top: 16px;
 }
 #close {
     display: none;
@@ -109,7 +110,11 @@ a {
     color: black;
     font-weight: 900;
 }
-
+.divider{
+    margin: 0 auto;
+    width: 70%;
+    display: block;
+}
 #sidebar h3 {
     font-size: 13px;
 }
@@ -264,12 +269,13 @@ th, td {
     }
     #sign{
         height: 30px;
+        display: block;
     }
     #nav{
         height: 60px;
     }
     .icon {
-        top: 18px;
+        top: 16px;
     }
     #menu {
         display: block;
