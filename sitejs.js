@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    $('#content').css({'margin':'160px auto 50px'});
+    $('#nav').css({'height': '65px'})
     $(window).scroll(function() {
         var w = $(window).width();
         if(w > 600) {
