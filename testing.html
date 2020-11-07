@@ -1,0 +1,106 @@
+<div class="modal fade" data-backdrop="static" id="memberModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document" style='min-height: 92vh;'>
+        <div class="modal-content">
+            <div class="modal-header pl-0">
+                <div class='modal-centered w-100'>
+                  <span class="align-top float-left oi oi-reload" id='membersPageReload'></span>
+                  <h2 class="w-100 text-center text-gray" style="margin: 0 auto;">Member Page</h2>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class='vertical-align: middle'>
+                    <img src='https://drive.google.com/uc?export=download&id=1o5jNw9izcF7DeTm1r_J7S5TS3AEAet4a' class='image-40'>
+                    <h4 class='text-gray' style='display: inline-block;'>Kohei Sanno</h4>
+                </div>
+                <div class='container-sm border border-info py-2 mt-3' style='border-radius: 5px;'>
+                    <div style='width: 75%; display: inline-block;'>
+                        <h3 class='text-left text-gray'>Total Hours</h3>
+                    </div>
+                    <div style='width: 23%; display: inline-block;'>
+                        <button type="button" data-toggle="collapse" data-target="#memberHoursTable" class="toggleButton expandButton btn btn-info" style='position: relative; top: 9px;height:40px;width:40px;float:right;'><span style='font-size: 28px'></span></button>
+                    </div>
+                    <div class='table-responsive'>
+                    <table class="table table-lg my-3 collapse" id='memberHoursTable'>
+                      <thead>
+                        <tr>
+                          <th scope="col">Club</th>
+                          <th scope="col" class='text-left'>Hours</th>
+                        </tr>
+                      </thead>
+                      <tbody id="memberHours">
+                      </tbody>
+                    </table>
+                    </div>
+                </div>
+                  <div class='container-sm border border-info py-2 mt-3' style='border-radius: 5px;'>
+                    <div style='width: 75%; display: inline-block;'>
+                      <h3 class='text-left text-gray'>All Logs</h3>
+                    </div>
+                    <div style='width: 23%; display: inline-block;'>
+                      <button type="button" data-toggle="collapse" data-target="#memberLogTable" class="toggleButton expandButton btn btn-info" style='position: relative; top: 9px;height:40px;width:40px;float:right;'><span style='font-size: 28px'></span></button>
+                    </div>
+                    <div class='table-responsive'>
+                    <table class="table table-lg my-3 collapse" id='memberLogTable'>
+                      <thead>
+                        <tr>
+                          <th scope="col" class='text-left'>Club</th>
+                          <th scope="col" class='text-left'>Event Date</th>
+                          <th scope="col" class='text-left'>Check-in Date</th>
+                          <th scope="col" class='text-left'>Name</th>
+                          <th scope="col" class='text-left'>Hours</th>
+                          <th scope='col'></th>
+                        </tr>
+                      </thead>
+                      <tbody id="memberLog">
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                  <div class='container-sm border border-info py-2 mt-3' style='border-radius: 5px;'>
+                    <div style='width: 75%; display: inline-block;'>
+                      <h3 class='text-left text-gray'>Add Hours</h3>
+                    </div>
+                    <div style='width: 23%; display: inline-block;'>
+                      <button type="button" data-toggle="collapse" data-target="#addHours" class="toggleButton expandButton btn btn-info" style='position: relative; top: 9px;height:40px;width:40px;float:right;'><span style='font-size: 28px'></span></button>
+                    </div>
+                    <div id='addHours' class='collapse'>
+                      <select class="form-control my-2" id="addHoursClub" style='max-width: 550px; margin: 0 auto' onchange='loadAddHours()'>
+                      </select>
+                      <div style='max-width: 550px; margin: 0 auto'>
+                        <label class="text-gray mt-2" for="addHoursEvent">Event</label>
+                        <select class='form-control' id='addHoursEvent' onchange='showAddHours()'>
+                          <option value="">Miscellaneous</option>
+                        </select>
+                      </div>
+                      <div class='addHoursDetail' style='max-width: 550px; margin: 0 auto' hidden>
+                        <label class="text-gray mt-2" for="addHoursActivity">Activity</label>
+                        <select class='form-control' id='addHoursActivity'>
+                          <option value="Meeting">Meeting</option>
+                          <option value="Service Activity">Service Activity</option>
+                          <option value="Other">Other</option>
+                        </select>
+                      </div>
+                      <div class='addHoursDetail' style='max-width: 550px; margin: 0 auto' hidden>
+                        <label class="text-gray mt-2" for="addHoursTime">Time</label>
+                        <input class="form-control" type="datetime-local" id="addHoursTime">
+                      </div>
+                        <div style='max-width: 550px; margin: 0 auto'>
+                            <label class="text-gray mt-2" for="addHoursHours">Hours</label>
+                            <input class="form-control" type="number" id="addHoursHours" max="2" min='0'>
+                        </div>
+                        <div class='addHoursDetail d-flex justify-content-end mt-3' style='max-width: 550px; margin: 0 auto'>
+                            <button type="button" class="btn btn-secondary" id='membersPageCheckin'>Check-in</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-secondary" id='memberUpdateButton' onclick="updateMemberHours()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
