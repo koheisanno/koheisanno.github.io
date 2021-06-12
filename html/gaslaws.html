@@ -5,81 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Kohei Sanno's personal website.">
     <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="../static/stylesheet.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169035348-1"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'UA-169035348-1');
+        gtag('config', 'UA-169035348-1');
     </script>
 </head>
 <body>
-    <!--<div id='overlay'>
-        <div id='overlaytxt'>
-                <a href="index.html"><h1 class=current>ABOUT</h1></a>
-                <a href="blog.html"><h1>BLOG</h1></a>
-        </div>
+    <div id='nav'>
+        <a href='index.html'><img src='../static/sign.jpg' id='sign'></a>
     </div>
-    <a href='#'><img src='icon.png' class='icon' id='menu'><img src='close.png' class='icon' id='close'></a>-->
-    <div id=nav>
-        <!--<ul class=nav1>
-            <li><a href="#headcontain" class="current navi defaultlink">ABOUT</a></li>
-            <li><a href="blog.html" class="navi defaultlink">BLOG</a></li>
-        </ul>-->
-        <a href='index.html'><img src='sign.jpg' id='sign'></a>
-    </div>
-    <div id=content>
-        <div id=1>
-            <h2 class=title>Modeling the Gas Laws with a Simulation</h2>
+    <div id='content'>
+        <div id='1'>
+            <h2 class='title'>Modeling the Gas Laws with a Simulation</h2>
             <p>The Kinetic Molecular Theory (KMT) is a set of postulates that help explain why gasses follow the ideal gas law: PV = nRT.</p>
             <p>I decided to create a 2D model of an ideal gas that follows the Kinetic Molecular Theory using the pygame module in python, whereby I could specify the area of the container, the number of particles, as well as the average kinetic energy of the particles.</p>
             <p>In this simulation, I did not attempt to use real-life units. Rather, I used arbitrary units, which was sufficient for my purpose.</p>
-            <h3 class=subtitle>Building the Gas Model</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/jOan6on22tY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>Above is a demo of the Python program that I created. The left panel shows the particles in motion and the right panel shows the speed distribution of the particles. After running for 1000 frames, the program stops and shows the average speed distribution. As expected, the average speed distribution resembles <a href="https://en.wikipedia.org/wiki/Maxwell%E2%80%93Boltzmann_distribution" target="_blank">the Maxwell-Boltzmann</a> curve—an indication that my program accurately models the behavior of ideal gases.</p>
+            <h3 class='subtitle'>Building the Gas Model</h3>
             <p>In order to create a gas model, I first needed to create a simple physics module that would simulate elastic collisions with circle objects. To accomplish this, I drew heavily from this <a href='http://www.petercollingridge.co.uk/tutorials/pygame-physics-simulation/' target="_blank">tutorial</a> by Peter Collingridge, basing the fundamental structure of my program from this resource. Below are some of the things I added or modified in order to make my program suit my purpose.</p>
-            <h4 class=subsubtitle>Collisions</h4>
+            <h4 class='subsubtitle'>Collisions</h4>
             <p>I changed the collision function as this existing collision function did not produce accurate results in certain scenarios, especially when a collision occurred between two particles going in the same general direction (i.e. a rear-end collision).</p>
             <p>I solved this problem using velocity vectors. In these elastic collisions, I would create two scalar values for each particle: a velocity value in the normal direction and one in the tangential direction. These would be derived from the normal and tangential vectors. The tangential velocity value wouldn’t change as it is perpendicular to the collision, and there wouldn’t be any forces affecting it. The normal velocity would basically undergo a one-dimensional elastic collision, where both the kinetic energy and momentum are conserved.</p>
             <p>This <a href='http://www.vobarian.com/collisions/2dcollisions2.pdf' target="_blank">document</a> by Chad Bercheck explains this process in more depth. The Wikipedia <a href='https://en.wikipedia.org/wiki/Momentum#Application_to_collisions' target="_blank">article</a> on elastic collisions is helpful as well.</p>
-            <h4 class=subsubtitle>Kinetic Energy, and Velocity</h4>
+            <h4 class='subsubtitle'>Kinetic Energy, and Velocity</h4>
             <p>Initially, this program only had a speed variable along with a value that determined the angle. In this program, however, I wanted to use temperature as one of the metrics, simply because this was one of the variables in the ideal gas law.</p>
             <p>I implemented this idea by making the program accept an input for temperature; the speed would simply be the square root of the temperature. This is because velocity is proportional to the square root of kinetic energy (as seen in \(KE= {1 \over 2} mv^2\)). Kinetic energy, in turn, is directly proportional to temperature.</p>
-            <h4 class=subsubtitle>Pressure</h4>
+            <h4 class='subsubtitle'>Pressure</h4>
             <p>Finding the pressure is relatively simple; the program has to find the force exerted against the wall and divide it by the perimeter of the container (adapted from \(P={F \over A}\) as the model is in two-dimensions). I found the force from the equation \(F={\Delta p \over \Delta t}\). The change in momentum is given by the value 2mv(only the x-component of the velocity should be taken into account when hitting the vertical walls, and only the y-component of the velocity should be taken into account when hitting the horizontal walls). The only adjustment to make is to use the number of frames (or screen updates) as a measurement of time rather than actual time in seconds, as each frame takes a different amount of time to be calculated and load, which would produce inconsistent results.</p>
             <p>So, the final expression would be the change in momentum, which would be the sum of all changes in momentum for each individual collision, divided by the number of frames and the perimeter.</p>
             <p>This <a href='https://www.sciwebhop.net/sci_web/physics/a-level/as_module2/derivation_of_pv.htm' target="_blank">article</a> explains some of the concepts described here.</p>
-            <h4 class=subsubtitle>Initial Conditions</h4>
+            <h4 class='subsubtitle'>Initial Conditions</h4>
             <p>The initial conditions are either determined by the user or randomized. The adjustable variables are temperature, number of particles, the dimensions of the container, the radius of the particles, and the mass of the particles. The dimensions must be specified, while the radius, the mass, and the total number of the particles would default to 1 if unspecified. The temperature would be randomized if unspecified.</p>
             <p>During the simulation, a graph that shows the distribution of the velocities of particles would be shown, and the pressure would be printed at the end of the simulation.</p>
-            <h3 class=subtitle>Verifying Gas Laws</h3>
+            <h3 class='subtitle'>Verifying Gas Laws</h3>
             <p>Certain gas laws could be verified using the results of the model.</p>
-            <h4 class=subsubtitle>Boyle’s Law</h4>
+            <h4 class='subsubtitle'>Boyle’s Law</h4>
             <p>I ran the simulation with 150 particles and a temperature of 100, while varying the dimensions to adjust the area. If the model followed Boyle’s law, the pressure should be inversely proportional to the area, which would produce a constant k when the pressure and area are multiplied.</p>
-            <p class=bold>Data</p>
-            <img src='data1.png' style="width: 100%;">
+            <p class='bold'>Data</p>
+            <img src='../static/data1.png' style="width: 100%;">
             <p>Mean k=75744.03797<br>Standard Dev=242.3032857<br>Relative Standard Dev=0.32%</p>
             <p>The data produced a constant k of around 76000, demonstrating Boyle’s law.</p>
             <h4 class=subsubtitle>Gay-Lussac’s Law</h4>
             <p>I ran the simulation with 150 particles and an area of 90000 (300 by 300), while varying the temperature. If the model followed Gay-Lussac’s law, the pressure should be proportional to the temperature, which would produce a constant k when the temperature is divided by the pressure.</p>
             <p class=bold>Data</p>
-            <img src='data2.png' style="width: 100%;">
+            <img src='../static/data2.png' style="width: 100%;">
             <p>Mean k=118.3358032<br>Standard Dev=0.1632490347<br>Relative Standard Dev=0.14%</p>
             <p>The data produced a constant k of around 118, demonstrating Gay-Lussac’s law.</p>
-            <h4 class=subsubtitle>Charles’ Law</h4>
+            <h4 class='subsubtitle'>Charles’ Law</h4>
             <p>I ran the simulation with 150 particles, while varying the temperature and area. I adjusted the temperature and area such that the ratio between the two would remain the same. This would establish V1T1=V2T2. If the model followed Gay-Lussac’s law, the other variables would remain constant, including pressure.</p>
-            <p class=bold>Data</p>
-            <img src='data3.png' style="width: 100%;">
+            <p class='bold'>Data</p>
+            <img src='../static/data3.png' style="width: 100%;">
             <p>Mean Pressure=1.916057225<br>Standard Dev=0.02729058177<br>Relative Standard Dev=1.42%</p>
             <p>The pressure remained relatively constant throughout the trials, demonstrating Charles’ law.</p>
         </div>
     </div>
-    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno'>(Git)</a></span>
-    <div id=footing>
-        <p id=footertext>Contact: firstname dot lastname at gmail dot com</p>
+    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno' target="_blank">(Git)</a></span>
+    <div id='footing'>
+        <p id='footertext'>Contact: firstname dot lastname at gmail dot com</p>
     </div>
 </body>
 </html>

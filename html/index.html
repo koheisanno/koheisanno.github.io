@@ -9,22 +9,22 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169035348-1"></script>
 
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="../static/stylesheet.css">
 
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'UA-169035348-1');
+        gtag('config', 'UA-169035348-1');
     </script>
-    <script src="sitejs.js" type="text/javascript"></script>
+    <script src="../static/sitejs.js" type="text/javascript"></script>
 </head>
 <body>
     <div id='top'></div>
     <div id='overlay'>
         <div id='overlaytxt'>
-                <a href="index.html"><h1 class=currentOver>PROJECTS</h1></a>
+                <a href="index.html"><h1 class='currentOver'>PROJECTS</h1></a>
                 <a href="resume.html"><h1>RESUME</h1></a>
         </div>
     </div>
@@ -42,14 +42,15 @@
             <li><a href="index.html" class="current navi defaultlink">PROJECTS</a></li>
             <li><a href="resume.html" class="navi defaultlink">RESUME</a></li>
         </ul>
-        <a href='index.html'><img src='sign.jpg' id='sign'></a>
+        <a href='index.html'><img src='../static/sign.jpg' id='sign'></a>
     </div>
     <div id='content'>
         <div id='7' class='post'>
-            <a href="https://exalted-arcanum-297817.et.r.appspot.com/" class="defaultlink" target="_blank"><h2 class="title">Text Summarization Using Matrix Factorization</h2></a>
-            <h4>November 30th 2020</h4>
+            <a href="https://exalted-arcanum-297817.et.r.appspot.com/" class="defaultlink" target="_blank"><h2 class="title">Text Summarization Using Matrices: Latent Semantic Analysis</h2></a>
+            <h4>30 November 2020</h4>
             <p>Used Singular Value Decomposition to evaluate which sentences are the most semantically significant in a block of text to form a summary.</p>
-            <p>Linked is a quick demontration. Specify the number of sentences you want in your summary and enter the original text.</p>
+            <p>Linked above is a quick demontration using Google App Engine. Specify the number of sentences you want in your summary and enter the original text.</p>
+            <p><strong><a href="https://www.researchgate.net/publication/220195824_Text_summarization_using_Latent_Semantic_Analysis" target="_blank">Click here</a></strong> for further info on how the algorithm works.</p>
         </div>
         <svg width="100%" height="2" class='divider'>
             <rect width="100%" height="2" style="fill:rgb(216, 216, 216);" />
@@ -106,9 +107,9 @@
         </div>
     </div>
 
-    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno'>(Git)</a></span>
-    <div id=footing>
-        <p id=footertext>contact: firstname dot lastname at gmail dot com</p>
+    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno' target="_blank">(Git)</a></span>
+    <div id='footing'>
+        <p id='footertext'>contact: firstname dot lastname at gmail dot com</p>
     </div>
 </body>
 </html>

@@ -106,9 +106,12 @@ li {
     text-align: center;
 }
 a {
-    text-decoration: none;
+    text-decoration: underline;
     color: black;
     font-weight: 900;
+}
+.defaultlink{
+    text-decoration: none;
 }
 .divider{
     margin: 0 auto;
@@ -170,34 +173,6 @@ h5{
 a:hover{
     color: rgb(100, 100, 100)
 }
-
-/**@media screen and (min-width: 750px) {
-    #menu {
-        display: none;
-    }
-}
-@media screen and (max-width: 750px) {
-    ul.nav1 {
-        display: none;
-    }
-}**/
-
-/**.map {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-    top: 200px;
-   }
-.map iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 0 10%;
-   }**/
 
 iframe{
     width: 100%;

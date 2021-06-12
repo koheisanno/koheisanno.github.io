@@ -5,46 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Kohei Sanno's personal website.">
     <meta http-equiv=”Content-Type” content=”text/html; charset=utf-8″ />
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="../static/stylesheet.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169035348-1"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'UA-169035348-1');
+        gtag('config', 'UA-169035348-1');
     </script>
 
 </head>
 <body>
-    <!--<div id='overlay'>
-        <div id='overlaytxt'>
-                <a href="index.html"><h1 class=current>ABOUT</h1></a>
-                <a href="blog.html"><h1>BLOG</h1></a>
-        </div>
+    <div id='nav'>
+        <a href='index.html'><img src='../static/sign.jpg' id='sign'></a>
     </div>
-    <a href='#'><img src='icon.png' class='icon' id='menu'><img src='close.png' class='icon' id='close'></a>-->
-    <div id=nav>
-        <!--<ul class=nav1>
-            <li><a href="#headcontain" class="current navi defaultlink">ABOUT</a></li>
-            <li><a href="blog.html" class="navi defaultlink">BLOG</a></li>
-        </ul>-->
-        <a href='index.html'><img src='sign.jpg' id='sign'></a>
-    </div>
-    <div id=content>
-        <div id=1>
-            <h2 class=title>Celestial Bodies Simulation using Javascript</h2>
-            <h3 class=subtitle>Introduction</h3>
+    <div id='content'>
+        <div id='1'>
+            <h2 class='title'>Celestial Bodies Simulation using Javascript</h2>
+            <h3 class='subtitle'>Introduction</h3>
             <p>
                 For my final AP Calculus BC project, I decided to combine my interest in math, physics, coding by creating a program that simulates celestial bodies and their gravitational effects on one another. While this may seem like a purely physics-based project, there is actually quite a bit of mathematics that goes into this program.<br><br>
                 <a href='nbodysim.html'><p id='stronglink'>Find the program here >></p></a>
             </p>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/jXRGdwHEKoc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <h3 class=subtitle>Exploration</h3>
-            <h4 class=subsubtitle>The Program</h4>
+            <h3 class='subtitle'>Exploration</h3>
+            <h4 class='subsubtitle'>The Program</h4>
             <p>
                 This program would be run by going through these steps at each time interval:<br><br>
                 1)      Iterate through each object and calculate the net force acting on each one according to the gravitational force formula, and use that value to determine net acceleration.<br>
@@ -56,18 +45,18 @@
                 $$x_f=\int_i^f \frac{dx}{dt} \,dt +x_i$$ <br>
                 Where x<sub>i</sub> is the current position and x<sub>f</sub> is the updated position.
             </p>
-            <h4 class=subsubtitle>The Physics</h4>
+            <h4 class='subsubtitle'>The Physics</h4>
             <p>
                 The formula to find the gravitational forces between individual objects is \(F=G\frac{m_1m_2}{r^2}\), where m1 and m2 represent the mass of the objects, and r is the distance between the two objects.
             </p>
-            <h5 class=subsubsubtitle>Circular Orbits</h5>
+            <h5 class='subsubsubtitle'>Circular Orbits</h5>
             <p>
                 To find the tangential velocity in a circular orbit, one could set the above formula to the formula for centripetal forces, \(F_c=\frac{mv^2}{r}\).<br><br>
                 $$\frac{m_1v^2}{r}= G\frac{m_1m_2}{r^2}$$<br>
                 $$v=\sqrt{\frac{Gm_2}{r}}$$<br>
                 Where m<sub>2</sub> is the mass of the central object.
             </p>
-            <h5 class=subsubsubtitle>Momentum</h5>
+            <h5 class='subsubsubtitle'>Momentum</h5>
             <p>
                 I also explored momentum and how it can be calculated in this program. Because it is a closed system with only balanced forces acting on each element, total momentum of the system should stay at zero, but the individual momentum values should vary. There are two formulas for momentum:<br><br>
                 $$p=mv$$<br>
@@ -78,13 +67,13 @@
                 It turns out that this method yielded more accurate results than the first method, so I kept this method in my final product.<br><br>
                 Up until this point, I was only dealing with concepts that I had learned in class. However, I wanted to take it a step further by studying elliptical orbits.
             </p>
-            <h3 class=subtitle>Extension</h3>
+            <h3 class='subtitle'>Extension</h3>
             <p>
                 My extension was looking into elliptical orbits and studying some laws associated with planetary orbits.<br><br>
                 Two physicists, Issac Newton and Johannes Kepler, contributed much of what we know about planetary motion today, with Kepler positing three laws of planetary motion, which were then verified and slightly modified based upon Newton’s law of universal gravitation. <br><br>
                 One conclusion was that all planetary orbits are conic sections, which are circles, ellipses, hyperbola, and parabolas. This means that, for any seemingly random non-circle orbit, there’s an ellipse that exactly matches that path. Using this fact, I wanted to see if I could find the period and the semi-major axis for any elliptical orbit.
             </p>
-            <h4 class=subsubtitle>Finding the Period and Semi-Major Axis</h4>
+            <h4 class='subsubtitle'>Finding the Period and Semi-Major Axis</h4>
             <p>
                 I approached this by looking at total energy. As energy is conserved throughout the orbit, the total mechanical energy of the object in orbit must be the same at both extrema of the ellipse. I used this property to set up this equation:<br><br>
                 $$\frac{-GMm}{2a}=\frac{-GMm}{r}+{1 \over 2} mv^2$$<br>
@@ -94,23 +83,23 @@
                 $$T=2\pi\sqrt{\frac{a^3}{GM}}$$<br>
                 This gives us the equation for the period of the orbit based upon the parameters that the user will input!
             </p>
-            <h4 class=subsubtitle>Verifying Kepler’s Second Law</h4>
+            <h4 class='subsubtitle'>Verifying Kepler’s Second Law</h4>
             <p>
                 In order to check if my simulation was accurate, I checked if the program accurately demonstrated another law from Kepler, which states that the straight line joining a planet and a sun sweeps out equal areas in equal time. This is because as the planet gets closer to the sun, the planet would go faster, and vice versa.<br><br>
-                <img src='kepler.png'><br><br>
+                <img src='../static/kepler.png'><br><br>
                 This is another opportunity to incorporate a bit of calculus. The most logical way of finding the total area is by using the equation for polar areas:<br><br>
                 $$A=\frac12\int_a^b r^2 d\theta$$<br>
                 &theta; could easily be found using the law of cosines, and I will approximate r by using the distance between the planet and the sun at each frame. Essentially, this will be a right Riemann sum to estimate the polar area. Using the period that we found earlier, I made my program find the area for the first quarter of the period, and the third quarter of the period. The results showed that the areas were very close to one another, “verifying” Kepler’s third law and demonstrating the accuracy of my program.
             </p>
-            <h3 class=subtitle>Conclusion</h3>
+            <h3 class='subtitle'>Conclusion</h3>
             <p>
                 One natural extension would be to look at other conic sections, such as a hyperbolic or parabolic “orbit”. As they won’t orbit back to its original position, this won’t necessarily be an orbit but, nevertheless, it would be interesting to see how the object’s movement can be modeled from a physics perspective. Another application would be to model our solar system with my model, although that may require more precision than what my program can currently accommodate.
             </p>
         </div>
     </div>
-    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno'>(Git)</a></span>
-    <div id=footing>
-        <p id=footertext>contact: firstname dot lastname at gmail dot com</p>
+    <span id='developer'>Developed by Kohei Sanno <a id='git' href='https://github.com/koheisanno' target="_blank">(Git)</a></span>
+    <div id='footing'>
+        <p id='footertext'>contact: firstname dot lastname at gmail dot com</p>
     </div>
 </body>
 </html>
